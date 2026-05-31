@@ -6,6 +6,14 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
+        trim: true,
+        uppercase: true,
+    },
+    // Legacy field kept in sync for existing DB indexes that use productID.
+    productID: {
+        type: String,
+        trim: true,
+        uppercase: true,
     },
     name: {
         type: String,
@@ -52,6 +60,16 @@ const productSchema = new mongoose.Schema({
         required: true,
         default: 0,
     },
+});
+
+productSchema.pre("validate", function () {
+    if (this.productId && !this.productID) {
+        this.productID = this.productId;
+    }
+
+    if (this.productID && !this.productId) {
+        this.productId = this.productID;
+    }
 });
 
 const Product = mongoose.model("Product", productSchema);

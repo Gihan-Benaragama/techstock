@@ -1,6 +1,10 @@
 import Product from "../model/product.js";
 import { isAdmin } from "./userController.js";
 
+function normalizeProductId(value) {
+    return String(value || "").trim().toUpperCase();
+}
+
 export async function createProduct(req, res) {
     if (!isAdmin(req)) {
         res.status(403).json({
@@ -10,39 +14,79 @@ export async function createProduct(req, res) {
     }
 
     try {
+        const payload = {
+            productId: normalizeProductId(req.body.productId),
+            productID: normalizeProductId(req.body.productId),
+            name: String(req.body.name || "").trim(),
+            altNames: Array.isArray(req.body.altNames)
+                ? req.body.altNames.map((item) => String(item).trim()).filter(Boolean)
+                : undefined,
+            price: Number(req.body.price),
+            labelledPrice: Number(req.body.labelledPrice),
+            description: req.body.description ? String(req.body.description).trim() : undefined,
+            images: Array.isArray(req.body.images)
+                ? req.body.images.map((item) => String(item).trim()).filter(Boolean)
+                : undefined,
+            brand: req.body.brand ? String(req.body.brand).trim() : undefined,
+            model: req.body.model ? String(req.body.model).trim() : undefined,
+            category: req.body.category ? String(req.body.category).trim() : undefined,
+            stock: Number(req.body.stock),
+        };
+
+        if (!payload.productId || !payload.name) {
+            return res.status(400).json({
+                message: "productId and name are required.",
+            });
+        }
+
+        if (!Number.isFinite(payload.price) || !Number.isFinite(payload.labelledPrice) || !Number.isFinite(payload.stock)) {
+            return res.status(400).json({
+                message: "price, labelledPrice and stock must be valid numbers.",
+            });
+        }
+
         const existingProduct = await Product.findOne({
-            productId: req.body.productId,
+            $or: [
+                { productId: payload.productId },
+                { productID: payload.productId },
+            ],
         });
 
         if (existingProduct != null) {
             res.status(400).json({
-                message: "Product with this productId already exists.",
+                message: `Product with productId '${payload.productId}' already exists.`,
             });
             return;
         }
 
-        const newProduct = new Product({
-            productId: req.body.productId,
-            name: req.body.name,
-            altNames: req.body.altNames,
-            price: req.body.price,
-            labelledPrice: req.body.labelledPrice,
-            description: req.body.description,
-            images: req.body.images,
-            brand: req.body.brand,
-            model: req.body.model,
-            category: req.body.category,
-            stock: req.body.stock,
-        });
+        const newProduct = new Product(payload);
 
         await newProduct.save();
 
         res.status(201).json({
             message: "Product created successfully.",
+            product: newProduct,
         });
     } catch (error) {
-        res.status(500).json({
-            message: "Error creating product",
+        if (error?.code === 11000) {
+            const duplicateField = Object.keys(error?.keyPattern || {})[0] || Object.keys(error?.keyValue || {})[0] || "field";
+            const duplicateValue = error?.keyValue?.[duplicateField];
+            return res.status(400).json({
+                message: duplicateValue !== undefined
+                    ? `Duplicate value for ${duplicateField}: '${duplicateValue}'.`
+                    : "Duplicate value error.",
+            });
+        }
+
+        if (error?.name === "ValidationError") {
+            const firstError = Object.values(error.errors || {})[0];
+            return res.status(400).json({
+                message: firstError?.message || "Invalid product data.",
+            });
+        }
+
+        return res.status(500).json({
+            message: error?.message || "Error creating product",
         });
     }
 }

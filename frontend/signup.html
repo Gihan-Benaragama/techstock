@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workspace Sign Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="scene">
+    <div class="overlay"></div>
+    <section class="card" aria-label="Sign up form">
+      <div class="brand">
+        <img src="./images/download.png" alt="TechStore Logo" class="logo-image" />
+      </div>
+      <h1>Create Your Account</h1>
+      <form id="signupForm" class="login-form" novalidate>
+        <label class="field" for="name">
+          <span class="field-icon">@</span>
+          <input id="name" name="name" type="text" placeholder="Full Name" required />
+        </label>
+        <label class="field" for="email">
+          <span class="field-icon">@</span>
+          <input id="email" name="email" type="email" placeholder="Email" required />
+        </label>
+        <label class="field" for="password">
+          <span class="field-icon">*</span>
+          <input id="password" name="password" type="password" placeholder="Password" required />
+        </label>
+        <label class="field" for="confirmPassword">
+          <span class="field-icon">*</span>
+          <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" required />
+        </label>
+        <button id="submitBtn" type="submit" class="submit-btn">Sign Up</button>
+      </form>
+      <p id="status" class="status" aria-live="polite"></p>
+      <p class="signup-text" style="margin-top: 15px;">Already have an account? <a href="login.html">Login</a></p>
+    </section>
+  </main>
+  <script src="./signup.js"></script>
+</body>
+</html>
