@@ -72,7 +72,7 @@ export async function loginUser(req, res) {
                     Image: user.Image
                 };
 
-                const token = jwt.sign(payload, "I-CoMputerS10Batch"); // Sign the JWT with a secret key
+                const token = jwt.sign(payload, process.env.JWT_SECRET || "I-CoMputerS10Batch"); // Sign the JWT with a secret key
 
                 res.json({
                     token: token
@@ -146,7 +146,7 @@ export async function loginUser(req, res) {
                  isEmailVerified: user.isEmailVerified,
                  Image: user.image
              };
-             const token = jwt.sign(jwtPayload, "I-CoMputerS10Batch");
+             const token = jwt.sign(jwtPayload, process.env.JWT_SECRET || "I-CoMputerS10Batch");
              
              res.json({ token });
          } catch (error) {

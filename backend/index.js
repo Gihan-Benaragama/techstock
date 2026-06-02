@@ -3,6 +3,9 @@ import { setDefaultResultOrder, setServers } from 'dns';
 setDefaultResultOrder('ipv4first');
 setServers(['8.8.8.8', '8.8.4.4']);
 
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import mongoose from "mongoose";
 import path from "path";
@@ -23,7 +26,7 @@ function go() {
 }
 
 
-const mongoURI = "mongodb+srv://admin:1234@cluster0.ldaaoqa.mongodb.net/?appName=Cluster0"
+const mongoURI = process.env.MONGODB_URI || "mongodb+srv://admin:1234@cluster0.ldaaoqa.mongodb.net/?appName=Cluster0";
 
 
 
@@ -114,8 +117,9 @@ app.use((err, req, res, next) => {
 });
 
 
-app.listen(5001, '0.0.0.0', () => {
-    console.log("Server is running on port 5001");
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on port ${PORT}`);
 });
 
 

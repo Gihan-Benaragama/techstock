@@ -10,7 +10,7 @@ export default function authenticateUser(req, res, next) {
         console.log("Token:", token);
 
         if (token && token !== "null" && token !== "undefined" && token !== "") {
-            jwt.verify(token, "I-CoMputerS10Batch", (error, decoded) => {
+            jwt.verify(token, process.env.JWT_SECRET || "I-CoMputerS10Batch", (error, decoded) => {
                 if (error) {
                     return res.status(401).json({
                         message: "Invalid or Expired Token. Please login again."
