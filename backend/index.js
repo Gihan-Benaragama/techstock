@@ -122,6 +122,8 @@ app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
+export default app;
+
 
 //    "email": "admin@example.com",
 //    "password": "Admin@1234",
