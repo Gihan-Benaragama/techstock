@@ -127,7 +127,7 @@ const OrderProcessor = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5001/orders", {
+      const res = await fetch("https://techstock-kxtz.onrender.com/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -160,7 +160,7 @@ const OrderProcessor = () => {
         {/* Header */}
         <header className="checkout-header">
           <div className="header-container">
-            <img src="./images/download.png" alt="Logo" className="logo" onClick={() => window.location.href = "user-dashboard.html"} style={{cursor: "pointer", height: "35px", width: "auto", display: "block", objectFit: "contain"}} />
+            <img src="./images/download.png" alt="Logo" className="logo" onClick={() => window.location.href = "user-dashboard.html"} style={{ cursor: "pointer", height: "35px", width: "auto", display: "block", objectFit: "contain" }} />
             <nav className="nav-menu">
               <span onClick={() => window.location.href = "user-dashboard.html"}>Home</span>
               <span>Shop All</span>
@@ -170,7 +170,7 @@ const OrderProcessor = () => {
             </nav>
             <div className="secure-badge">
               <svg className="lock-icon" viewBox="0 0 24 24" width="16" height="16">
-                <path fill="currentColor" d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0,-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9ZM18,20H6V10H18Z"/>
+                <path fill="currentColor" d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0,-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9ZM18,20H6V10H18Z" />
               </svg>
               <span>Secure Checkout</span>
             </div>
@@ -197,7 +197,7 @@ const OrderProcessor = () => {
             <h1>Thank You for Your Order!</h1>
             <p className="order-number-text">Your order has been placed successfully. Order ID is <strong>{orderId}</strong></p>
             <p className="confirmation-email-text">A confirmation email has been sent to <strong>{email}</strong>.</p>
-            
+
             <div className="delivery-details-card">
               <h3>Delivery Details</h3>
               <p><strong>Customer Name:</strong> {fullName}</p>
@@ -224,7 +224,7 @@ const OrderProcessor = () => {
       {/* Header */}
       <header className="checkout-header">
         <div className="header-container">
-          <img src="./images/download.png" alt="Logo" className="logo" onClick={() => window.location.href = "user-dashboard.html"} style={{cursor: "pointer", height: "35px", width: "auto", display: "block", objectFit: "contain"}} />
+          <img src="./images/download.png" alt="Logo" className="logo" onClick={() => window.location.href = "user-dashboard.html"} style={{ cursor: "pointer", height: "35px", width: "auto", display: "block", objectFit: "contain" }} />
           <nav className="nav-menu">
             <span onClick={() => window.location.href = "user-dashboard.html"}>Home</span>
             <span>Shop All</span>
@@ -234,7 +234,7 @@ const OrderProcessor = () => {
           </nav>
           <div className="secure-badge">
             <svg className="lock-icon" viewBox="0 0 24 24" width="16" height="16">
-              <path fill="currentColor" d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0,-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9ZM18,20H6V10H18Z"/>
+              <path fill="currentColor" d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0,-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9ZM18,20H6V10H18Z" />
             </svg>
             <span>Secure Checkout</span>
           </div>
@@ -243,7 +243,7 @@ const OrderProcessor = () => {
 
       {/* Breadcrumbs */}
       <div className="breadcrumbs">
-        <span className="breadcrumb-item" onClick={() => window.location.href = "user-dashboard.html"} style={{cursor: "pointer"}}>Cart</span>
+        <span className="breadcrumb-item" onClick={() => window.location.href = "user-dashboard.html"} style={{ cursor: "pointer" }}>Cart</span>
         <span className="breadcrumb-separator">&gt;</span>
         <span className="breadcrumb-item active">Checkout</span>
         <span className="breadcrumb-separator">&gt;</span>
@@ -252,7 +252,7 @@ const OrderProcessor = () => {
 
       {/* Main Grid */}
       <div className="checkout-layout">
-        
+
         {/* Left Column: Form */}
         <form className="checkout-form" onSubmit={handlePlaceOrder}>
           <h2>Checkout</h2>
@@ -425,7 +425,7 @@ const OrderProcessor = () => {
                   {paymentMethod === "cod" && <div className="option-radio-dot" />}
                 </div>
                 <svg className="payment-icon cod-icon" viewBox="0 0 24 24" width="20" height="20">
-                  <path fill="currentColor" d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8,-8A8,8,0,0,1,12,20ZM13,7H11v4H7v2h4v4h2V13h4V11H13Z"/>
+                  <path fill="currentColor" d="M12,2A10,10,0,1,0,22,12,10,10,0,0,0,12,2Zm0,18a8,8,0,1,1,8,-8A8,8,0,0,1,12,20ZM13,7H11v4H7v2h4v4h2V13h4V11H13Z" />
                 </svg>
                 <div className="payment-info">
                   <span className="payment-title">Cash on Delivery</span>
@@ -442,7 +442,7 @@ const OrderProcessor = () => {
                   {paymentMethod === "card" && <div className="option-radio-dot" />}
                 </div>
                 <svg className="payment-icon card-icon" viewBox="0 0 24 24" width="20" height="20">
-                  <path fill="currentColor" d="M20,4H4A2,2,0,0,0,2,6V18a2,2,0,0,0,2,2H20a2,2,0,0,0,2,-2V6A2,2,0,0,0,20,4Zm0,14H4V12H20ZM20,8H4V6H20Z"/>
+                  <path fill="currentColor" d="M20,4H4A2,2,0,0,0,2,6V18a2,2,0,0,0,2,2H20a2,2,0,0,0,2,-2V6A2,2,0,0,0,20,4Zm0,14H4V12H20ZM20,8H4V6H20Z" />
                 </svg>
                 <div className="payment-info">
                   <span className="payment-title">Credit / Debit Card</span>
@@ -485,14 +485,14 @@ const OrderProcessor = () => {
           <div className="form-actions">
             <div className="back-link" onClick={() => window.location.href = "user-dashboard.html"}>
               <svg viewBox="0 0 24 24" width="16" height="16">
-                <path fill="currentColor" d="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z"/>
+                <path fill="currentColor" d="M20,11H7.83l5.59,-5.59L12,4l-8,8 8,8 1.41,-1.41L7.83,13H20v-2z" />
               </svg>
               <span>Back to Cart</span>
             </div>
             <div className="submit-btn-wrapper">
               <button type="submit" className="place-order-btn" disabled={loading}>
                 <svg className="btn-lock-icon" viewBox="0 0 24 24" width="16" height="16">
-                  <path fill="currentColor" d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0,-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9ZM18,20H6V10H18Z"/>
+                  <path fill="currentColor" d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0,-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9ZM18,20H6V10H18Z" />
                 </svg>
                 <span>{loading ? "Placing Order..." : "Place Order"}</span>
               </button>
@@ -504,7 +504,7 @@ const OrderProcessor = () => {
         {/* Right Column: Order Summary */}
         <aside className="checkout-summary">
           <h3>Order Summary <span className="item-count-badge">{cart.reduce((s, i) => s + i.qty, 0)} Items</span></h3>
-          
+
           {/* Scrollable Items list */}
           <div className="summary-items-list">
             {cart.length === 0 ? (
@@ -564,7 +564,7 @@ const OrderProcessor = () => {
           {/* Secure checkout note */}
           <div className="secure-checkout-box">
             <svg viewBox="0 0 24 24" width="18" height="18" className="green-lock-icon">
-              <path fill="currentColor" d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0,-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9ZM18,20H6V10H18Z"/>
+              <path fill="currentColor" d="M18,8H17V6A5,5,0,0,0,7,6V8H6a2,2,0,0,0,-2,2V20a2,2,0,0,0,2,2H18a2,2,0,0,0,2,-2V10A2,2,0,0,0,18,8ZM9,6a3,3,0,0,1,6,0V8H9ZM18,20H6V10H18Z" />
             </svg>
             <div className="secure-text">
               <strong>Secure Checkout</strong>
@@ -578,7 +578,7 @@ const OrderProcessor = () => {
               <div className="assurance-icon-circle">
                 {/* Fast Delivery Truck */}
                 <svg viewBox="0 0 24 24" width="18" height="18">
-                  <path fill="currentColor" d="M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,12V9.5H19.5L21.46,12H17M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5Z"/>
+                  <path fill="currentColor" d="M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M17,12V9.5H19.5L21.46,12H17M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5Z" />
                 </svg>
               </div>
               <div className="assurance-details">
@@ -591,7 +591,7 @@ const OrderProcessor = () => {
               <div className="assurance-icon-circle">
                 {/* Easy Returns Arrow */}
                 <svg viewBox="0 0 24 24" width="18" height="18">
-                  <path fill="currentColor" d="M12,5V1L7,6L12,11V7A6,6 0 0,1 18,13A6,6 0 0,1 12,19A6,6 0 0,1 6,13H4A8,8 0 0,0 12,21A8,8 0 0,0 20,13A8,8 0 0,0 12,5Z"/>
+                  <path fill="currentColor" d="M12,5V1L7,6L12,11V7A6,6 0 0,1 18,13A6,6 0 0,1 12,19A6,6 0 0,1 6,13H4A8,8 0 0,0 12,21A8,8 0 0,0 20,13A8,8 0 0,0 12,5Z" />
                 </svg>
               </div>
               <div className="assurance-details">
@@ -604,7 +604,7 @@ const OrderProcessor = () => {
               <div className="assurance-icon-circle">
                 {/* 100% Secure Shield */}
                 <svg viewBox="0 0 24 24" width="18" height="18">
-                  <path fill="currentColor" d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,11.93V19C8.9,17.9 6.5,14.6 6.06,11H12V11.93Z"/>
+                  <path fill="currentColor" d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,11.93V19C8.9,17.9 6.5,14.6 6.06,11H12V11.93Z" />
                 </svg>
               </div>
               <div className="assurance-details">

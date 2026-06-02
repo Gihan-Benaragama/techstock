@@ -10,7 +10,7 @@ function decodeJwtPayload(token) {
 }
 const token = localStorage.getItem("token");
 const payload = token ? decodeJwtPayload(token) : null;
-const API_BASE_URL = "http://localhost:5001";
+const API_BASE_URL = "https://techstock-kxtz.onrender.com";
 const isLoggedIn = !!payload;
 
 // Show login button or profile menu based on auth state
