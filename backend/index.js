@@ -118,9 +118,24 @@ app.use((err, req, res, next) => {
 
 
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
 });
+
+// Keep-alive ping to prevent Render free tier from sleeping
+setInterval(() => {
+    fetch(`https://techstock-kxtz.onrender.com/users/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'ping@ping.com', password: 'ping' })
+    }).catch(() => {});
+}, 14 * 60 * 1000);
+// Keep Render awake by pinging login endpoint every 14 minutes
+setInterval(() => {
+  fetch('https://techstock-kxtz.onrender.com/users/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: 'ping@ping.com', password: 'ping' })
+  }).catch(() => {});
+}, 14 * 60 * 1000);
 
 export default app;
 

@@ -279,5 +279,184 @@
       }
     });
   </script>
+<canvas id="pcb-bg" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;"></canvas>
+<script>
+const canvas = document.getElementById('pcb-bg');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const GREEN = '#00ff88';
+const DIM = '#003322';
+const GLOW = '#00ffaa';
+
+let traces = [];
+let nodes = [];
+let pulses = [];
+let frame = 0;
+
+function randInt(a, b) { return Math.floor(Math.random() * (b - a)) + a; }
+
+function generateGrid() {
+  const cols = 22, rows = 16;
+  const cw = canvas.width / cols, ch = canvas.height / rows;
+  
+  nodes = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (Math.random() > 0.55) {
+        nodes.push({
+          x: c * cw + cw/2 + randInt(-8, 8),
+          y: r * ch + ch/2 + randInt(-8, 8),
+          size: Math.random() > 0.85 ? 5 : Math.random() > 0.6 ? 3 : 2,
+          type: Math.random() > 0.9 ? 'ic' : Math.random() > 0.7 ? 'via' : 'pad',
+          bright: Math.random()
+        });
+      }
+    }
+  }
+
+  traces = [];
+  const used = new Set();
+  nodes.forEach((n, i) => {
+    const nearby = nodes
+      .map((m, j) => ({ j, d: Math.hypot(m.x - n.x, m.y - n.y) }))
+      .filter(e => e.j !== i && e.d < 80 && !used.has(`${Math.min(i,e.j)}-${Math.max(i,e.j)}`))
+      .sort((a,b) => a.d - b.d)
+      .slice(0, randInt(1,3));
+    
+    nearby.forEach(e => {
+      const key = `${Math.min(i,e.j)}-${Math.max(i,e.j)}`;
+      if (!used.has(key)) {
+        used.add(key);
+        const a = nodes[i], b = nodes[e.j];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const mx = a.x + dx * 0.5, my = a.y;
+        traces.push({
+          x1: a.x, y1: a.y,
+          mx, my,
+          x2: b.x, y2: b.y,
+          len: 0, maxLen: 1,
+          active: false,
+          alpha: 0.15 + Math.random() * 0.25
+        });
+      }
+    });
+  });
+}
+
+function spawnPulse() {
+  if (traces.length === 0) return;
+  const t = traces[randInt(0, traces.length)];
+  pulses.push({ trace: t, t: 0, speed: 0.008 + Math.random() * 0.012 });
+}
+
+function drawNode(n) {
+  const a = 0.4 + n.bright * 0.6;
+  ctx.strokeStyle = `rgba(0,255,136,${a})`;
+  ctx.fillStyle = `rgba(0,255,136,${a * 0.3})`;
+  ctx.lineWidth = 0.8;
+
+  if (n.type === 'ic') {
+    ctx.beginPath();
+    ctx.rect(n.x - n.size * 2, n.y - n.size * 2, n.size * 4, n.size * 4);
+    ctx.fill();
+    ctx.stroke();
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.moveTo(n.x - n.size * 2 - 4, n.y - n.size + i * n.size);
+      ctx.lineTo(n.x - n.size * 2, n.y - n.size + i * n.size);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(n.x + n.size * 2, n.y - n.size + i * n.size);
+      ctx.lineTo(n.x + n.size * 2 + 4, n.y - n.size + i * n.size);
+      ctx.stroke();
+    }
+  } else if (n.type === 'via') {
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.size + 2, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  } else {
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+}
+
+function getTracePoint(t, progress) {
+  const p = Math.min(progress, 1);
+  if (p <= 0.5) {
+    const s = p * 2;
+    return {
+      x: t.x1 + (t.mx - t.x1) * s,
+      y: t.y1 + (t.my - t.y1) * s
+    };
+  } else {
+    const s = (p - 0.5) * 2;
+    return {
+      x: t.mx + (t.x2 - t.mx) * s,
+      y: t.my + (t.y2 - t.my) * s
+    };
+  }
+}
+
+function drawTrace(t) {
+  ctx.beginPath();
+  ctx.moveTo(t.x1, t.y1);
+  ctx.lineTo(t.mx, t.my);
+  ctx.lineTo(t.x2, t.y2);
+  ctx.strokeStyle = `rgba(0,255,136,${t.alpha})`;
+  ctx.lineWidth = 0.8;
+  ctx.stroke();
+}
+
+function drawPulse(p) {
+  const pos = getTracePoint(p.trace, p.t);
+  const grd = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 10);
+  grd.addColorStop(0, 'rgba(0,255,170,0.9)');
+  grd.addColorStop(0.4, 'rgba(0,255,136,0.4)');
+  grd.addColorStop(1, 'rgba(0,255,136,0)');
+  ctx.fillStyle = grd;
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, 10, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(200,255,230,0.95)';
+  ctx.fill();
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#0a0f1e';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  traces.forEach(drawTrace);
+  nodes.forEach(n => {
+    n.bright = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame * 0.02 + n.x * 0.05));
+    drawNode(n);
+  });
+
+  if (frame % 18 === 0) spawnPulse();
+
+  pulses = pulses.filter(p => {
+    p.t += p.speed;
+    drawPulse(p);
+    return p.t < 1;
+  });
+
+  frame++;
+  requestAnimationFrame(animate);
+}
+
+generateGrid();
+animate();
+</script>
 </body>
 </html>
