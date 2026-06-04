@@ -93,15 +93,26 @@ export async function createProduct(req, res) {
 
 export async function getAllProducts(req, res) {
     try {
-        if (isAdmin(req)) {
-            const products = await Product.find();
-
-            res.json(products);
-        } else {
-            const products = await Product.find({ isAvailable: true });
-
-            res.json(products);
+        // Support server-side pagination via ?page=1&limit=12
+        const page = Math.max(1, parseInt(req.query.page || '1', 10));
+        const limit = Math.max(1, parseInt(req.query.limit || '12', 10));
+        const filter = isAdmin(req) ? {} : { isAvailable: true };
+        // optional search
+        if (req.query.search) {
+            const q = String(req.query.search).trim();
+            const regex = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+            filter.$or = [ { name: regex }, { description: regex }, { altNames: regex } ];
         }
+
+        const total = await Product.countDocuments(filter);
+        const totalPages = Math.max(1, Math.ceil(total / limit));
+
+        const products = await Product.find(filter)
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .exec();
+
+        res.json({ products, page, limit, total, totalPages });
     } catch (error) {
         res.status(500).json({
             message: "Error fetching products",
@@ -119,7 +130,10 @@ export async function deleteProduct(req, res) {
 
     try {
         const deleted = await Product.findOneAndDelete({
-            productId: req.params.productId  // ✅ now matches route
+            $or: [
+                { productId: req.params.productId },
+                { productID: req.params.productId }
+            ]
         });
 
         if (deleted == null) {
@@ -150,7 +164,10 @@ export async function updateProduct(req, res) {
     try {
 
         await Product.updateOne({
-            productId: req.params.productId
+            $or: [
+                { productId: req.params.productId },
+                { productID: req.params.productId }
+            ]
         }, {
             name: req.body.name,
             altNames: req.body.altNames,
@@ -205,7 +222,10 @@ export async function updateProductStock(req, res) {
 export async function getProductById(req, res) {
     try {
         const product = await Product.findOne({
-            productId: req.params.productId
+            $or: [
+                { productId: req.params.productId },
+                { productID: req.params.productId }
+            ]
         })
         if (product == null) {
             res.status(404).json({

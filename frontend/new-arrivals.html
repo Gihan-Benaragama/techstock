@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Arrivals – Tech Stock</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .arrivals-hero {
+      position: relative;
+      min-height: 430px;
+      margin-top: 0;
+      background-image:
+        linear-gradient(90deg, rgba(2, 6, 23, 0.88) 0%, rgba(2, 6, 23, 0.56) 42%, rgba(2, 6, 23, 0.15) 100%),
+        url('./images/image.png');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      padding: 32px 7vw;
+      color: #fff;
+    }
+
+    .arrivals-hero-content {
+      max-width: 540px;
+    }
+
+    .arrivals-hero h1 {
+      margin: 0 0 6px;
+      font-size: clamp(2.3rem, 5vw, 3.8rem);
+      line-height: 0.98;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .arrivals-hero h2 {
+      margin: 0;
+      font-size: clamp(1.25rem, 2.5vw, 2rem);
+      font-weight: 800;
+      line-height: 1.15;
+    }
+
+    .arrivals-hero p {
+      margin: 10px 0 12px;
+      font-size: 1.1rem;
+      line-height: 1.35;
+      max-width: 460px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .arrivals-cta {
+      border: 0;
+      background: #fff;
+      color: #111827;
+      padding: 10px 18px;
+      border-radius: 7px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .arrivals-products-wrap {
+      padding: 26px 22px 10px;
+      background: #f3f4f6;
+    }
+
+    #latest-products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    #latest-products .product-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 5px 16px rgba(2, 6, 23, 0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 0;
+      min-height: 255px;
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    #latest-products .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 9px 20px rgba(2, 6, 23, 0.12);
+    }
+
+    #latest-products .product-image-container {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    #latest-products .product-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+      margin: 0;
+    }
+
+    #latest-products .product-name,
+    #latest-products .product-price {
+      text-align: left;
+      padding: 0 10px;
+    }
+
+    #latest-products .product-name {
+      margin: 10px 0 4px;
+      font-size: 0.95rem;
+      line-height: 1.25;
+      color: #0f172a;
+      font-weight: 700;
+      display: -webkit-box;
+      line-clamp: 2;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.4em;
+    }
+
+    #latest-products .product-price {
+      margin: 0 0 12px;
+      color: #0f9d58;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    @media (max-width: 700px) {
+      .arrivals-hero {
+        min-height: 320px;
+        padding: 24px 5vw;
+      }
+
+      .arrivals-hero p {
+        font-size: 0.98rem;
+      }
+
+      #latest-products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      #latest-products .product-card img {
+        height: 130px;
+      }
+    }
+  </style>
+
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="dashboard-header">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button id="mobileMenuBtn" class="hamburger-btn mobile-only">☰</button>
+      <img src="./images/download.png" alt="Logo" class="dashboard-logo" style="cursor:pointer;" onclick="window.location.href='index.html'" />
+    </div>
+    <nav class="dashboard-nav desktop-only">
+      <a href="index.html">Home</a>
+      <a href="user-dashboard.html">Shop All</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a href="best-sellers.html">Best Sellers</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="dashboard-actions">
+      <div class="search-container desktop-only">
+        <input type="text" id="searchInput" placeholder="Search" class="dashboard-search" />
+        <div id="searchResults" class="search-results-dropdown" style="display: none;"></div>
+      </div>
+      <button id="cartBtn" class="dashboard-cart" title="View Cart">
+        <span class="cart-icon">🛒</span>
+        <span id="cartCount" class="cart-count">0</span>
+      </button>
+      <!-- Login button shown when NOT logged in -->
+      <a id="headerLoginBtn" href="login.html" class="header-login-btn desktop-only" style="display:none;">Login</a>
+      <!-- Profile menu shown when logged in -->
+      <div id="profileMenuContainer" class="profile-menu-container desktop-only" style="display:none;">
+        <button id="profileBtn" class="profile-btn" aria-label="User profile">
+          <img id="profileAvatar"
+            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+            alt="Avatar" class="profile-avatar" />
+        </button>
+        <div id="profileDropdown" class="profile-dropdown" style="display: none;">
+          <div class="profile-dropdown-header">
+            <img id="dropdownAvatar"
+              src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+              alt="Avatar" class="dropdown-avatar" />
+            <div class="profile-info">
+              <h4 id="profileName">User Name</h4>
+              <p id="profileEmail">user@example.com</p>
+            </div>
+          </div>
+          <div class="profile-dropdown-divider"></div>
+          <button id="profileLogoutBtn" class="profile-logout-btn">
+            <span class="logout-icon">🚪</span> Log Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobileDrawer" class="mobile-drawer">
+    <div class="mobile-drawer-header">
+      <div class="dashboard-title">Menu</div>
+      <button id="closeMobileDrawerBtn" class="mobile-drawer-close">&times;</button>
+    </div>
+    <div class="mobile-search-container" style="position: relative; margin: 10px 20px;">
+      <input type="text" id="mobileSearchInput" placeholder="Search products..." class="mobile-drawer-search" style="width: 100%; box-sizing: border-box;" />
+      <div id="mobileSearchResults" class="search-results-dropdown" style="display: none; position: absolute; left: 0; right: 0; width: auto; max-height: 250px;"></div>
+    </div>
+    <div class="mobile-profile-section">
+      <img id="mobileAvatar"
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+        alt="Avatar" class="mobile-avatar" />
+      <div class="mobile-profile-info">
+        <h4 id="mobileName">User Name</h4>
+        <p id="mobileEmail">user@example.com</p>
+      </div>
+    </div>
+    <nav class="mobile-drawer-nav">
+      <a href="index.html">Home</a>
+      <a href="user-dashboard.html">Shop All</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a href="best-sellers.html">Best Sellers</a>
+      <a href="about.html">About</a>
+      <a href="login.html" id="mobileLoginBtn" style="color: #38bdf8; display:none;">Login</a>
+      <a href="#" id="mobileLogoutBtn" style="color: #e60044; display:none;">Log Out</a>
+    </nav>
+  </div>
+
+  <!-- Cart Sidebar -->
+  <div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-sidebar-content">
+      <div class="cart-sidebar-header">
+        <span class="cart-title">Cart <span id="cartItemCount">(0 item)</span></span>
+        <span id="closeCartSidebar" class="close-cart-sidebar">&times;</span>
+      </div>
+      <hr />
+      <div id="cartItems"></div>
+      <div id="cartPromo" class="cart-promo">
+        <input type="text" id="promoInput" placeholder="Enter a promo code" />
+      </div>
+      <hr />
+      <div class="cart-estimate">
+        <div class="cart-estimate-label">Estimated total</div>
+        <div id="cartTotal" class="cart-estimate-value"></div>
+      </div>
+      <div class="cart-estimate-note">Taxes and shipping are calculated at checkout.</div>
+      <button class="cart-checkout-btn">Checkout</button>
+      <button class="cart-view-btn">View Cart</button>
+      <div class="cart-secure"><span class="cart-lock">&#128274;</span> Secure Checkout</div>
+    </div>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="arrivals-hero">
+    <div class="arrivals-hero-content">
+      <h1>New Arrivals</h1>
+      <h2>TechStock Vortex Pro Mechanical Gaming Keyboard</h2>
+      <p>Custom switches, dynamic RGB, and unmatched responsiveness.</p>
+    </div>
+  </section>
+
+  <!-- PRODUCT GRID (dynamic) -->
+  <section class="arrivals-products-wrap">
+    <!-- JS will inject latest products here -->
+    <div id="latest-products"></div>
+  </section>
+
+  <!-- SCRIPT: fetch latest two products -->
+  <script>
+    // Adjust the API URL to point to the backend (port 5001)
+    const API_URL = `${window.location.protocol}//${window.location.hostname}:5001/products`;
+
+    // Helper to create a product card element.
+    const createCard = (product) => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      // Prefer images[0], then image or imageUrl
+      let img = (product.images && product.images.length > 0) ? product.images[0] : (product.image || product.imageUrl || './images/product-placeholder.png');
+      // If relative path (no protocol) make it relative
+      if (typeof img === 'string' && !/^https?:\/\//i.test(img) && !img.startsWith('/')) img = `./${img}`;
+      const priceText = (typeof product.price === 'number') ? `Rs. ${product.price.toLocaleString()}` : 'Rs. --';
+      card.innerHTML = `
+        <div class="product-image-container" onclick="window.location.href='product-detail.html?id=${encodeURIComponent(product.productId || product._id)}'" style="cursor:pointer;">
+          <img src="${img}" alt="${product.name || 'Product'}" />
+        </div>
+        <div class="product-name">${product.name || ''}</div>
+        <div class="product-price">${priceText}</div>
+      `;
+      return card;
+    };
+
+    // Fetch products, sort by newest, and render the latest set.
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(payload => {
+        // backend may return either an array or an object { products, page, total }
+        const products = Array.isArray(payload) ? payload : (Array.isArray(payload?.products) ? payload.products : []);
+        const sorted = products.slice().sort((a, b) => new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id));
+        const latestItems = sorted.slice(0, 8);
+        const container = document.getElementById('latest-products');
+        latestItems.forEach(p => container.appendChild(createCard(p)));
+      })
+      .catch(err => {
+        console.error('Failed to load latest products:', err);
+        const container = document.getElementById('latest-products');
+        container.innerHTML = '<p style="color:#f87171;">Unable to load new arrivals.</p>';
+      });
+  </script>
+
+  <script src="./header.js"></script>
+  <script src="./nav-active.js"></script>
+</body>
+</html>

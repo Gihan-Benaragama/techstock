@@ -12,7 +12,9 @@ import path from "path";
 import { fileURLToPath } from "url";
 import studentRouter from "./routers/studentRouter.js";
 import userRouter from "./routers/userRouter.js";
+import { getAllUsers } from "./controller/userController.js";
 import authenticateUser from "./middleware/authentication.js";
+
 import productRouter from "./routers/productRouter.js";
 import orderRouter from "./routers/orderRouter.js";
 
@@ -41,6 +43,12 @@ mongoose.connect(mongoURI)
     });
 
 app.use(express.json());
+
+// Log incoming requests for debugging
+app.use((req, res, next) => {
+    console.log(`[REQUEST] ${req.method} ${req.url}`);
+    next();
+});
 
 // Enable CORS middleware for robust local development cross-origin requests
 app.use((req, res, next) => {
@@ -94,11 +102,13 @@ app.get('/frontend/:page.jsx', (req, res, next) => {
 app.use('/frontend', express.static(frontendDir));
 // Public user routes (signup and login) - no auth required
 app.use('/users', userRouter);
+app.use('/products', productRouter); // public route
 // Apply authentication middleware for protected routes
+// Authentication middleware applied after public routes
 app.use(authenticateUser);
 // Protected routes
 app.use('/students', studentRouter);
-app.use('/products', productRouter);
+app.get('/api/users', getAllUsers);
 app.use('/api/users', userRouter); // if needed for other user APIs
 app.use('/orders', orderRouter);
 
@@ -118,6 +128,8 @@ app.use((err, req, res, next) => {
 
 
 const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
 
 // Keep-alive ping to prevent Render free tier from sleeping

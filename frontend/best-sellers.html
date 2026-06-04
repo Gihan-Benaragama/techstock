@@ -1,46 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Dashboard</title>
+  <title>Best Sellers – Tech Stock</title>
   <link rel="stylesheet" href="./styles.css" />
   <style>
-    /* Top-half hero for user dashboard using provided image */
-    .dashboard-hero {
-      /* full-bleed across viewport */
-      position: relative;
-      left: 50%;
-      right: 50%;
-      margin-left: -50vw;
-      margin-right: -50vw;
-      width: 100vw;
-      min-height: 55vh;
-      background-image: url("./images/Gemini_Generated_Image_cfmrc6cfmrc6cfmr.png");
-      background-size: cover;
-      background-position: left top;
-      background-repeat: no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      overflow: hidden;
+    /* Additional page‑specific tweaks */
+    .hero-text h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -1px;
     }
-
-    /* Use a dedicated hero overlay (transparent) so global .overlay rules don't alter image colors */
-    .dashboard-hero .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: transparent; /* preserve original image colors */
-      z-index: 1;
+    .hero-text p {
+      max-width: 720px;
+      margin: 0 auto;
     }
-
-    .dashboard-hero .hero-inner { position: relative; z-index: 2; max-width: 1200px; padding: 40px 20px; }
+    @media (max-width: 768px) {
+      .hero-text h1 { font-size: 2.2rem; }
+    }
   </style>
 </head>
-
 <body>
+  <!-- HEADER (fixed) -->
   <header class="dashboard-header">
     <div style="display:flex; align-items:center; gap:10px;">
       <button id="mobileMenuBtn" class="hamburger-btn mobile-only">☰</button>
@@ -110,7 +92,7 @@
       </div>
     </div>
     <nav class="mobile-drawer-nav">
-      <a href="index.html" class="active">Home</a>
+      <a href="index.html">Home</a>
       <a href="user-dashboard.html">Shop All</a>
       <a href="new-arrivals.html">New Arrivals</a>
       <a href="best-sellers.html">Best Sellers</a>
@@ -119,41 +101,88 @@
       <a href="#" id="mobileLogoutBtn" style="color: #e60044; display:none;">Log Out</a>
     </nav>
   </div>
-  <main class="dashboard-main">
-    <section class="dashboard-hero" aria-label="Dashboard hero">
-      <div class="hero-overlay" aria-hidden="true"></div>
-      <div class="hero-inner">
-        <!-- Hero content can be added here (title, CTA, etc.) -->
+
+  <!-- Cart Sidebar -->
+  <div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-sidebar-content">
+      <div class="cart-sidebar-header">
+        <span class="cart-title">Cart <span id="cartItemCount">(0 item)</span></span>
+        <span id="closeCartSidebar" class="close-cart-sidebar">&times;</span>
       </div>
-    </section>
-    <div id="productsList" class="category-grid"></div>
-      <div id="pagination" class="pagination" aria-label="Product list pagination"></div>
-    <div id="cartSidebar" class="cart-sidebar">
-      <div class="cart-sidebar-content">
-        <div class="cart-sidebar-header">
-          <span class="cart-title">Cart <span id="cartItemCount">(0 item)</span></span>
-          <span id="closeCartSidebar" class="close-cart-sidebar">&times;</span>
-        </div>
-        <hr />
-        <div id="cartItems"></div>
-        <div id="cartPromo" class="cart-promo">
-          <input type="text" id="promoInput" placeholder="Enter a promo code" />
-        </div>
-        <hr />
-        <div class="cart-estimate">
-          <div class="cart-estimate-label">Estimated total</div>
-          <div id="cartTotal" class="cart-estimate-value"></div>
-        </div>
-        <div class="cart-estimate-note">Taxes and shipping are calculated at checkout.</div>
-        <button class="cart-checkout-btn">Checkout</button>
-        <button class="cart-view-btn">View Cart</button>
-        <div class="cart-secure"><span class="cart-lock">&#128274;</span> Secure Checkout</div>
+      <hr />
+      <div id="cartItems"></div>
+      <div id="cartPromo" class="cart-promo">
+        <input type="text" id="promoInput" placeholder="Enter a promo code" />
       </div>
+      <hr />
+      <div class="cart-estimate">
+        <div class="cart-estimate-label">Estimated total</div>
+        <div id="cartTotal" class="cart-estimate-value"></div>
+      </div>
+      <div class="cart-estimate-note">Taxes and shipping are calculated at checkout.</div>
+      <button class="cart-checkout-btn">Checkout</button>
+      <button class="cart-view-btn">View Cart</button>
+      <div class="cart-secure"><span class="cart-lock">&#128274;</span> Secure Checkout</div>
     </div>
-  </main>
+  </div>
+
+  <!-- HERO SECTION -->
+  <section class="about-hero" style="background: radial-gradient(circle at right, #1a1a2e, #0b0d1a);">
+    <div class="hero-text">
+      <h1>Best Sellers</h1>
+      <div class="divider"></div>
+      <p>Explore the most popular premium gadgets that tech lovers can’t stop talking about. Hand‑picked, top‑rated, and trusted worldwide.</p>
+    </div>
+  </section>
+
+  <!-- PRODUCT GRID (dynamic) -->
+  <section class="product-grid" style="padding: 2rem 8%;">
+    <div id="best-sellers"></div>
+  </section>
+
+  <!-- SCRIPT: fetch best‑selling products -->
+  <script>
+    // Use the generic products endpoint
+    const API_URL = `${window.location.protocol}//${window.location.hostname}:5001/products`;
+
+    const createCard = (product) => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      let img = (product.images && product.images.length > 0) ? product.images[0] : (product.image || product.imageUrl || './images/product-placeholder.png');
+      if (typeof img === 'string' && !/^https?:\/\//i.test(img) && !img.startsWith('/')) img = `./${img}`;
+      const priceText = (typeof product.price === 'number') ? `Rs. ${product.price.toLocaleString()}` : 'Rs. --';
+      card.innerHTML = `
+        <div class="product-image-container" onclick="window.location.href='product-detail.html?id=${encodeURIComponent(product.productId || product._id)}'" style="cursor:pointer; width: 100%;">
+          <img src="${img}" alt="${product.name || 'Product'}" />
+        </div>
+        <div class="product-name" onclick="window.location.href='product-detail.html?id=${encodeURIComponent(product.productId || product._id)}'" style="cursor:pointer;">${product.name || ''}</div>
+        <div class="product-price">${priceText}</div>
+      `;
+      return card;
+    };
+
+    // Fetch, then sort by a hypothetical "sales" field (fallback to price) and display top-4.
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((payload) => {
+        const products = Array.isArray(payload) ? payload : (Array.isArray(payload?.products) ? payload.products : []);
+        const sorted = products.sort((a, b) => {
+          const aVal = a.sales ?? a.price ?? 0;
+          const bVal = b.sales ?? b.price ?? 0;
+          return bVal - aVal;
+        });
+        const topFour = sorted.slice(0, 4);
+        const container = document.getElementById('best-sellers');
+        topFour.forEach((p) => container.appendChild(createCard(p)));
+      })
+      .catch((err) => {
+        console.error('Failed to load best sellers:', err);
+        const container = document.getElementById('best-sellers');
+        container.innerHTML = '<p style="color:#f87171;">Unable to load best-selling products.</p>';
+      });
+  </script>
+
   <script src="./header.js"></script>
-  <script src="./user-dashboard.js"></script>
   <script src="./nav-active.js"></script>
 </body>
-
 </html>

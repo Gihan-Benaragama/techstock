@@ -2,8 +2,7 @@ const form = document.getElementById("loginForm");
 const statusEl = document.getElementById("status");
 const submitBtn = document.getElementById("submitBtn");
 
-const API_BASE_URL = "http://localhost:5001";
-
+const API_BASE_URL = "https://techstock-kxtz.onrender.com";
 function setStatus(message, type = "") {
   statusEl.textContent = message;
   statusEl.className = `status ${type}`.trim();
@@ -80,10 +79,28 @@ form.addEventListener("submit", async (event) => {
 
     setStatus(data.message || "Login failed.", "error");
   } catch (error) {
-    setStatus("Cannot reach server. Make sure backend is running.", "error");
-  } finally {
-    submitBtn.disabled = false;
-  }
+    setStatus("Server is waking up, retrying... (may take 30-60 seconds)", "");
+    submitBtn.disabled = true;
+    await new Promise(r => setTimeout(r, 8000));
+    try {
+        const retry = await fetch(`${API_BASE_URL}/users/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+        const retryData = await retry.json();
+        if (retry.ok && retryData.token) {
+            handleLoginSuccess(retryData.token);
+            return;
+        }
+        setStatus(retryData.message || "Login failed.", "error");
+    } catch (e) {
+        setStatus("Server is still waking up. Please try again in 30 seconds.", "error");
+    } finally {
+        submitBtn.disabled = false;
+    }
+}
+
 });
 
 // --- Google Sign-in Implementation ---

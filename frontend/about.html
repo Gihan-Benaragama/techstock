@@ -4,43 +4,128 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Dashboard</title>
+  <title>About Us – Tech Stock</title>
+
   <link rel="stylesheet" href="./styles.css" />
+
   <style>
-    /* Top-half hero for user dashboard using provided image */
-    .dashboard-hero {
-      /* full-bleed across viewport */
-      position: relative;
-      left: 50%;
-      right: 50%;
-      margin-left: -50vw;
-      margin-right: -50vw;
-      width: 100vw;
-      min-height: 55vh;
-      background-image: url("./images/Gemini_Generated_Image_cfmrc6cfmrc6cfmr.png");
-      background-size: cover;
-      background-position: left top;
-      background-repeat: no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      overflow: hidden;
+    /* ================= GLOBAL ================= */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #050b1a;
+      color: white;
     }
 
-    /* Use a dedicated hero overlay (transparent) so global .overlay rules don't alter image colors */
-    .dashboard-hero .hero-overlay {
+
+
+    /* ================= HERO SECTION ================= */
+    .about-hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5rem 8%;
+      min-height: 90vh;
+      position: relative;
+      /* for overlay */
+      background: url('./images/Gemini_Generated_Image_d9vfcbd9vfcbd9vf.png') center/cover no-repeat,
+        radial-gradient(circle at left, #0b1b3a, #050b1a);
+    }
+
+    .about-hero::before {
+      content: '';
       position: absolute;
       inset: 0;
-      background: transparent; /* preserve original image colors */
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 0;
+    }
+
+    .hero-text {
+      max-width: 550px;
+      position: relative;
       z-index: 1;
     }
 
-    .dashboard-hero .hero-inner { position: relative; z-index: 2; max-width: 1200px; padding: 40px 20px; }
+    .hero-text h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+    }
+
+    .hero-text p {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: #00ff88;
+      margin: 1rem 0;
+    }
+
+    /* ================= RIGHT IMAGE ================= */
+    .hero-image img {
+      width: 520px;
+      max-width: 100%;
+      filter: drop-shadow(0 0 20px rgba(0, 255, 200, 0.2));
+    }
+
+    /* ================= MISSION / VISION ================= */
+    .info-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 4rem 8%;
+      background: #070f24;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card h3 {
+      color: #00ff88;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+
+    .icon {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #00ff88;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 900px) {
+      .about-hero {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-text h1 {
+        font-size: 2.8rem;
+      }
+
+      .hero-image {
+        margin-top: 2rem;
+      }
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- HEADER -->
   <header class="dashboard-header">
     <div style="display:flex; align-items:center; gap:10px;">
       <button id="mobileMenuBtn" class="hamburger-btn mobile-only">☰</button>
@@ -110,7 +195,7 @@
       </div>
     </div>
     <nav class="mobile-drawer-nav">
-      <a href="index.html" class="active">Home</a>
+      <a href="index.html">Home</a>
       <a href="user-dashboard.html">Shop All</a>
       <a href="new-arrivals.html">New Arrivals</a>
       <a href="best-sellers.html">Best Sellers</a>
@@ -119,41 +204,79 @@
       <a href="#" id="mobileLogoutBtn" style="color: #e60044; display:none;">Log Out</a>
     </nav>
   </div>
-  <main class="dashboard-main">
-    <section class="dashboard-hero" aria-label="Dashboard hero">
-      <div class="hero-overlay" aria-hidden="true"></div>
-      <div class="hero-inner">
-        <!-- Hero content can be added here (title, CTA, etc.) -->
+
+  <!-- Cart Sidebar -->
+  <div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-sidebar-content">
+      <div class="cart-sidebar-header">
+        <span class="cart-title">Cart <span id="cartItemCount">(0 item)</span></span>
+        <span id="closeCartSidebar" class="close-cart-sidebar">&times;</span>
       </div>
-    </section>
-    <div id="productsList" class="category-grid"></div>
-      <div id="pagination" class="pagination" aria-label="Product list pagination"></div>
-    <div id="cartSidebar" class="cart-sidebar">
-      <div class="cart-sidebar-content">
-        <div class="cart-sidebar-header">
-          <span class="cart-title">Cart <span id="cartItemCount">(0 item)</span></span>
-          <span id="closeCartSidebar" class="close-cart-sidebar">&times;</span>
-        </div>
-        <hr />
-        <div id="cartItems"></div>
-        <div id="cartPromo" class="cart-promo">
-          <input type="text" id="promoInput" placeholder="Enter a promo code" />
-        </div>
-        <hr />
-        <div class="cart-estimate">
-          <div class="cart-estimate-label">Estimated total</div>
-          <div id="cartTotal" class="cart-estimate-value"></div>
-        </div>
-        <div class="cart-estimate-note">Taxes and shipping are calculated at checkout.</div>
-        <button class="cart-checkout-btn">Checkout</button>
-        <button class="cart-view-btn">View Cart</button>
-        <div class="cart-secure"><span class="cart-lock">&#128274;</span> Secure Checkout</div>
+      <hr />
+      <div id="cartItems"></div>
+      <div id="cartPromo" class="cart-promo">
+        <input type="text" id="promoInput" placeholder="Enter a promo code" />
       </div>
+      <hr />
+      <div class="cart-estimate">
+        <div class="cart-estimate-label">Estimated total</div>
+        <div id="cartTotal" class="cart-estimate-value"></div>
+      </div>
+      <div class="cart-estimate-note">Taxes and shipping are calculated at checkout.</div>
+      <button class="cart-checkout-btn">Checkout</button>
+      <button class="cart-view-btn">View Cart</button>
+      <div class="cart-secure"><span class="cart-lock">&#128274;</span> Secure Checkout</div>
     </div>
-  </main>
-  <script src="./header.js"></script>
-  <script src="./user-dashboard.js"></script>
-  <script src="./nav-active.js"></script>
+  </div>
+
+  <!-- HERO -->
+  <section class="about-hero">
+
+    <!-- LEFT TEXT -->
+    <div class="hero-text">
+      <h1>About Us</h1>
+
+      <div class="divider"></div>
+
+      <p>
+        Innovating the future of consumer electronics, one premium product at a time.
+      </p>
+
+      <br>
+
+      <p>
+        Founded in 2022, Tech Stock began as a boutique tech shop and evolved into a premium electronics brand trusted
+        worldwide.
+      </p>
+    </div>
+
+
+  </section>
+
+  <!-- INFO CARDS -->
+  <section class="info-section">
+
+    <div class="card">
+      <div class="icon">🎁</div>
+      <h3>Our Mission</h3>
+      <p>To make premium technology accessible, reliable, and enjoyable for everyone.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">👁️</div>
+      <h3>Our Vision</h3>
+      <p>To build a world where innovation enhances everyday life through smart devices.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">🚀</div>
+      <h3>Our Goal</h3>
+      <p>To deliver cutting-edge gadgets with modern design and high performance.</p>
+    </div>
+
+  </section>
+    <script src="./header.js"></script>
+    <script src="./nav-active.js"></script>
 </body>
 
 </html>

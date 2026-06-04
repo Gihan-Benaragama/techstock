@@ -193,9 +193,10 @@ async function fetchProducts() {
       throw new Error(data.message || "Failed to load products");
     }
 
+    const productList = data.products || [];
 
     productsTableBody.innerHTML = "";
-    for (const product of data) {
+    for (const product of productList) {
       const row = document.createElement("tr");
       // Status badge
       let statusHtml = '';
@@ -250,9 +251,9 @@ async function fetchProducts() {
       });
       productsTableBody.appendChild(row);
     }
-    if (data.length === 0) {
+    if (productList.length === 0) {
       const emptyRow = document.createElement("tr");
-      emptyRow.innerHTML = '<td colspan="6">No products found.</td>';
+      emptyRow.innerHTML = '<td colspan="10">No products found.</td>';
       productsTableBody.appendChild(emptyRow);
     }
 
@@ -302,6 +303,8 @@ if (!payload || !payload.isAdmin) {
 
   const ordersTableBody = document.getElementById("ordersTableBody");
   const refreshOrdersBtn = document.getElementById("refreshOrdersBtn");
+  const customersTableBody = document.getElementById("customersTableBody");
+  const refreshCustomersBtn = document.getElementById("refreshCustomersBtn");
 
   // Order Details Modal elements
   const orderDetailsModal = document.getElementById("orderDetailsModal");
@@ -543,7 +546,80 @@ if (!payload || !payload.isAdmin) {
     }
   }
 
+      async function fetchCustomers() {
+        if (!customersTableBody) return;
+        if (!token) {
+          // No token: redirect to login
+          window.location.href = "login.html";
+          return;
+        }
+        try {
+          setActionStatus("Loading customers directory...");
+          customersTableBody.innerHTML = '<tr><td colspan="7">Loading customers...</td></tr>';
+  
+          const response = await fetch(`${API_BASE_URL}/api/users`, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+  
+          if (!response.ok) {
+            const contentType = response.headers.get('content-type') || '';
+            let errMsg = '';
+            if (contentType.includes('application/json')) {
+              const errData = await response.json();
+              errMsg = errData.message || response.statusText;
+            } else {
+              errMsg = await response.text();
+            }
+            throw new Error(errMsg);
+          }
+  
+          const data = await response.json();
+  
+          customersTableBody.innerHTML = "";
+          for (const customer of data) {
+            const row = document.createElement("tr");
+            const verifiedHtml = customer.isEmailVerified 
+              ? '<span class="badge badge-green">Yes</span>' 
+              : '<span class="badge">No</span>';
+            const blockedHtml = customer.isBlocked 
+              ? '<span class="badge badge-amber">Blocked</span>' 
+              : '<span class="badge badge-green">Active</span>';
+            const roleHtml = customer.isAdmin 
+              ? '<span class="badge badge-blue">Admin</span>' 
+              : '<span class="badge">User</span>';
+            let avatarHtml = '';
+            if (customer.image) {
+              avatarHtml = `<img src="${customer.image}" alt="Avatar" style="max-width:32px;max-height:32px;border-radius:50%;object-fit:cover;">`;
+            } else {
+              avatarHtml = `<div style="width:32px;height:32px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:700;color:#475569;font-size:0.8rem;">${(customer.firstName || 'U')[0].toUpperCase()}</div>`;
+            }
+            row.innerHTML = `
+              <td>${avatarHtml}</td>
+              <td style="font-weight:600;">${customer.firstName || ""}</td>
+              <td style="font-weight:600;">${customer.lastName || ""}</td>
+              <td style="color:#64748b;">${customer.email || ""}</td>
+              <td>${verifiedHtml}</td>
+              <td>${blockedHtml}</td>
+              <td>${roleHtml}</td>
+            `;
+            customersTableBody.appendChild(row);
+          }
+          if (data.length === 0) {
+            customersTableBody.innerHTML = '<tr><td colspan="7">No customers found.</td></tr>';
+          }
+          setActionStatus("Customers directory loaded.", "success");
+        } catch (error) {
+          setActionStatus(error.message, "error");
+          if (customersTableBody) {
+            customersTableBody.innerHTML = `<tr><td colspan="7" style="color:#b91c1c;">Error: ${error.message}</td></tr>`;
+          }
+        }
+      }
+
   refreshOrdersBtn?.addEventListener("click", fetchOrders);
+  refreshCustomersBtn?.addEventListener("click", fetchCustomers);
 
   for (const btn of menuButtons) {
     btn.addEventListener("click", () => {
@@ -564,6 +640,8 @@ if (!payload || !payload.isAdmin) {
         fetchProducts();
       } else if (targetId === "ordersSection") {
         fetchOrders();
+      } else if (targetId === "customersSection") {
+        fetchCustomers();
       }
     });
   }

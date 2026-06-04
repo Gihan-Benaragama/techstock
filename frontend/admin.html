@@ -559,8 +559,30 @@
 
       <div id="customersSection" class="content-section" style="display: none;">
         <div class="panel">
-          <h3>Customers Directory</h3>
-          <p>Customer accounts directory feature is under development.</p>
+          <div class="panel-head">
+            <h3>Registered Customers</h3>
+            <button class="ghost-btn" style="padding:6px 12px;font-size:0.78rem;color:#334155;border-color:#cbd5e1;" id="refreshCustomersBtn">Refresh</button>
+          </div>
+          <div class="table-wrap" style="margin-top: 14px;">
+            <table>
+              <thead>
+                <tr>
+                  <th>Avatar</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Email</th>
+                  <th>Verified</th>
+                  <th>Blocked</th>
+                  <th>Role</th>
+                </tr>
+              </thead>
+              <tbody id="customersTableBody">
+                <tr>
+                  <td colspan="7">Loading customers...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 

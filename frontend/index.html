@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,32 +8,19 @@
   <link rel="stylesheet" href="./styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body, html {
+    body,
+    html {
       margin: 0;
       padding: 0;
       height: 100%;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      background: none; /* removed gradient so background video shows */
       color: #f8fafc;
       overflow-x: hidden;
     }
 
-    /* Navbar */
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 40px;
-      box-sizing: border-box;
-      background: rgba(15, 23, 42, 0.8);
-      backdrop-filter: blur(10px);
-      z-index: 100;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
+    /* Header styling moved to external CSS (.dashboard-header). */
+
     .logo {
       font-size: 1.5rem;
       font-weight: 800;
@@ -67,7 +55,7 @@
       font-weight: 600;
       box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4);
     }
-    
+
     .btn-primary:hover {
       background: #0284c7;
       box-shadow: 0 6px 20px rgba(14, 165, 233, 0.6);
@@ -78,6 +66,26 @@
     .hero {
       position: relative;
       overflow: hidden;
+    }
+
+    /* Background video (full-bleed) */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1; /* sit behind main content */
+      pointer-events: none;
+    }
+
+    .hero-logo {
+      width: 300px;
+      height: auto;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.5));
+      animation: fadeInDown 1s ease-out forwards;
     }
 
     .hero-content {
@@ -92,7 +100,8 @@
     }
 
     /* Background animated elements */
-    .hero::before, .hero::after {
+    .hero::before,
+    .hero::after {
       content: "";
       position: absolute;
       border-radius: 50%;
@@ -100,6 +109,7 @@
       z-index: -1;
       animation: float 8s ease-in-out infinite alternate;
     }
+
     .hero::before {
       width: 400px;
       height: 400px;
@@ -107,6 +117,7 @@
       top: 10%;
       left: 10%;
     }
+
     .hero::after {
       width: 500px;
       height: 500px;
@@ -117,29 +128,46 @@
     }
 
     @keyframes float {
-      0% { transform: translateY(0px) scale(1); }
-      100% { transform: translateY(-30px) scale(1.1); }
+      0% {
+        transform: translateY(0px) scale(1);
+      }
+
+      100% {
+        transform: translateY(-30px) scale(1.1);
+      }
     }
 
     h1 {
-      font-size: 4rem;
-      font-weight: 800;
+      font-size: 1.8rem;
+      font-weight: 900;
       margin-bottom: 20px;
-      line-height: 1.1;
-      background: linear-gradient(to right, #38bdf8, #818cf8);
+      line-height: 1.05;
+      position: relative;
+      /* blue gradient fill with clipped text */
+      background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 45%, #6366f1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      /* layered shadows to create a subtle 3D extrusion + glow */
+      text-shadow:
+        0 1px 0 rgba(0,0,0,0.35),
+        0 4px 8px rgba(2,6,23,0.45),
+        0 12px 30px rgba(2,6,23,0.55),
+        0 -2px 10px rgba(96,165,250,0.08) inset;
       animation: fadeInDown 1s ease-out forwards;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     p.subtitle {
       font-size: 1.25rem;
-      color: #94a3b8;
-      max-width: 600px;
+      color: #ffffff; /* solid white */
+      font-weight: 600;
+      max-width: 680px;
       margin-bottom: 40px;
       line-height: 1.6;
       animation: fadeInUp 1s ease-out 0.2s forwards;
       opacity: 0;
+      text-shadow: 0 10px 24px rgba(0,0,0,0.55);
     }
 
     .cta-group {
@@ -185,12 +213,27 @@
 
     /* Keyframes */
     @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Quick Links footer */
@@ -202,261 +245,341 @@
       text-decoration: none;
       transition: color 0.2s;
     }
+
     .admin-link:hover {
       color: #94a3b8;
     }
 
     @media (max-width: 768px) {
-      h1 { font-size: 2.5rem; }
-      .cta-group { flex-direction: column; width: 100%; max-width: 300px; }
-      header { padding: 15px 20px; }
-      nav { display: none; } /* Simplified for mobile */
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .cta-group {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      header {
+        padding: 15px 20px;
+      }
+
+      nav {
+        display: none;
+      }
+
+      /* Simplified for mobile */
     }
   </style>
 </head>
+
 <body>
 
-  <header>
+  <!-- Background video (served from project) -->
+  <video id="bg-video" autoplay muted loop playsinline preload="auto" poster="./images/download.png">
+    <source src="./video/WhatsApp%20Video%202026-06-01%20at%209.03.52%20AM.mp4" type="video/mp4">
+    <!-- Fallback content -->
+  </video>
+
+  <header class="dashboard-header">
     <div style="display:flex; align-items:center; gap:10px;">
-      <button id="mobileMenuBtn" class="hamburger-btn mobile-only" style="color: #fff; font-size: 1.5rem; background: none; border: none; cursor: pointer; display: none;">☰</button>
-      <div class="logo"><img src="./images/download.png" alt="Logo" class="dashboard-logo" /></div>
+      <button id="mobileMenuBtn" class="hamburger-btn mobile-only">☰</button>
+      <img src="./images/download.png" alt="Logo" class="dashboard-logo" style="cursor:pointer;" onclick="window.location.href='index.html'" />
     </div>
-    <nav class="desktop-only">
-      <a href="user-dashboard.html">Shop</a>
-      <a href="login.html">Login</a>
-      <a href="signup.html" class="btn-primary">Sign Up</a>
+    <nav class="dashboard-nav desktop-only">
+      <a href="index.html">Home</a>
+      <a href="user-dashboard.html">Shop All</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a href="best-sellers.html">Best Sellers</a>
+      <a href="about.html">About</a>
     </nav>
+    <div class="dashboard-actions">
+      <div class="search-container desktop-only">
+        <input type="text" id="searchInput" placeholder="Search" class="dashboard-search" />
+        <div id="searchResults" class="search-results-dropdown" style="display: none;"></div>
+      </div>
+      <button id="cartBtn" class="dashboard-cart" title="View Cart">
+        <span class="cart-icon">🛒</span>
+        <span id="cartCount" class="cart-count">0</span>
+      </button>
+      <!-- Login button shown when NOT logged in -->
+      <a id="headerLoginBtn" href="login.html" class="header-login-btn desktop-only" style="display:none;">Login</a>
+      <!-- Profile menu shown when logged in -->
+      <div id="profileMenuContainer" class="profile-menu-container desktop-only" style="display:none;">
+        <button id="profileBtn" class="profile-btn" aria-label="User profile">
+          <img id="profileAvatar"
+            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+            alt="Avatar" class="profile-avatar" />
+        </button>
+        <div id="profileDropdown" class="profile-dropdown" style="display: none;">
+          <div class="profile-dropdown-header">
+            <img id="dropdownAvatar"
+              src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+              alt="Avatar" class="dropdown-avatar" />
+            <div class="profile-info">
+              <h4 id="profileName">User Name</h4>
+              <p id="profileEmail">user@example.com</p>
+            </div>
+          </div>
+          <div class="profile-dropdown-divider"></div>
+          <button id="profileLogoutBtn" class="profile-logout-btn">
+            <span class="logout-icon">🚪</span> Log Out
+          </button>
+        </div>
+      </div>
+    </div>
   </header>
 
   <!-- Mobile Drawer -->
   <div id="mobileDrawer" class="mobile-drawer">
     <div class="mobile-drawer-header">
-      <div class="logo" style="color:#222;">Menu</div>
+      <div class="dashboard-title">Menu</div>
       <button id="closeMobileDrawerBtn" class="mobile-drawer-close">&times;</button>
     </div>
+    <div class="mobile-search-container" style="position: relative; margin: 10px 20px;">
+      <input type="text" id="mobileSearchInput" placeholder="Search products..." class="mobile-drawer-search" style="width: 100%; box-sizing: border-box;" />
+      <div id="mobileSearchResults" class="search-results-dropdown" style="display: none; position: absolute; left: 0; right: 0; width: auto; max-height: 250px;"></div>
+    </div>
+    <div class="mobile-profile-section">
+      <img id="mobileAvatar"
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+        alt="Avatar" class="mobile-avatar" />
+      <div class="mobile-profile-info">
+        <h4 id="mobileName">User Name</h4>
+        <p id="mobileEmail">user@example.com</p>
+      </div>
+    </div>
     <nav class="mobile-drawer-nav">
-      <a href="user-dashboard.html">Shop</a>
-      <a href="login.html">Login</a>
-      <a href="signup.html">Sign Up</a>
-      <a href="admin.html">Admin Portal</a>
+      <a href="index.html">Home</a>
+      <a href="user-dashboard.html">Shop All</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a href="best-sellers.html">Best Sellers</a>
+      <a href="about.html">About</a>
+      <a href="login.html" id="mobileLoginBtn" style="color: #38bdf8; display:none;">Login</a>
+      <a href="#" id="mobileLogoutBtn" style="color: #e60044; display:none;">Log Out</a>
     </nav>
   </div>
 
-  <main class="hero">
-    <h1>Next-Gen Tech.<br>Delivered Today.</h1>
-    <p class="subtitle">Experience the future of shopping with our curated selection of premium electronics and gadgets. Seamless checkout, real-time order tracking, and unparalleled design.</p>
-    
-    <div class="cta-group">
-      <a href="user-dashboard.html" class="cta-btn cta-primary">Explore Products</a>
-      <a href="login.html" class="cta-btn cta-secondary">Account Login</a>
+  <!-- Cart Sidebar -->
+  <div id="cartSidebar" class="cart-sidebar">
+    <div class="cart-sidebar-content">
+      <div class="cart-sidebar-header">
+        <span class="cart-title">Cart <span id="cartItemCount">(0 item)</span></span>
+        <span id="closeCartSidebar" class="close-cart-sidebar">&times;</span>
+      </div>
+      <hr />
+      <div id="cartItems"></div>
+      <div id="cartPromo" class="cart-promo">
+        <input type="text" id="promoInput" placeholder="Enter a promo code" />
+      </div>
+      <hr />
+      <div class="cart-estimate">
+        <div class="cart-estimate-label">Estimated total</div>
+        <div id="cartTotal" class="cart-estimate-value"></div>
+      </div>
+      <div class="cart-estimate-note">Taxes and shipping are calculated at checkout.</div>
+      <button class="cart-checkout-btn">Checkout</button>
+      <button class="cart-view-btn">View Cart</button>
+      <div class="cart-secure"><span class="cart-lock">&#128274;</span> Secure Checkout</div>
     </div>
+  </div>
 
-    <a href="admin.html" class="admin-link desktop-only">Admin Portal</a>
+  <main class="hero">
+    <div class="hero-content">
+      <img src="./images/download.png" alt="Tech Stock Logo" class="hero-logo" />
+      <h1>Next-Gen Tech.<br>Delivered Today.</h1>
+      <p class="subtitle">Experience the future of shopping with our curated selection of premium electronics and
+        gadgets. Seamless checkout, real-time order tracking, and unparalleled design.</p>
+      <div class="cta-group">
+        <a href="user-dashboard.html" class="cta-btn cta-primary">Explore Products</a>
+        <a href="login.html" class="cta-btn cta-secondary">Account Login</a>
+      </div>
+
+      <a href="admin.html" class="admin-link desktop-only">Admin Portal</a>
   </main>
 
+  <script src="./header.js"></script>
+  <script src="./nav-active.js"></script>
+  <canvas id="pcb-bg" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-2;"></canvas>
   <script>
-    // Simple redirect if user is already logged in and tries to access index
-    document.addEventListener("DOMContentLoaded", () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        // We could decode the JWT to check if admin, but a simple check is fine here
-      }
-      
-      // Mobile Drawer logic
-      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-      const mobileDrawer = document.getElementById("mobileDrawer");
-      const closeMobileDrawerBtn = document.getElementById("closeMobileDrawerBtn");
+    const canvas = document.getElementById('pcb-bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-      if (mobileMenuBtn && mobileDrawer) {
-        mobileMenuBtn.addEventListener("click", () => {
-          mobileDrawer.classList.add("open");
-        });
+    const GREEN = '#00ff88';
+    const DIM = '#003322';
+    const GLOW = '#00ffaa';
+
+    let traces = [];
+    let nodes = [];
+    let pulses = [];
+    let frame = 0;
+
+    function randInt(a, b) { return Math.floor(Math.random() * (b - a)) + a; }
+
+    function generateGrid() {
+      const cols = 22, rows = 16;
+      const cw = canvas.width / cols, ch = canvas.height / rows;
+
+      nodes = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          if (Math.random() > 0.55) {
+            nodes.push({
+              x: c * cw + cw / 2 + randInt(-8, 8),
+              y: r * ch + ch / 2 + randInt(-8, 8),
+              size: Math.random() > 0.85 ? 5 : Math.random() > 0.6 ? 3 : 2,
+              type: Math.random() > 0.9 ? 'ic' : Math.random() > 0.7 ? 'via' : 'pad',
+              bright: Math.random()
+            });
+          }
+        }
       }
-      if (closeMobileDrawerBtn && mobileDrawer) {
-        closeMobileDrawerBtn.addEventListener("click", () => {
-          mobileDrawer.classList.remove("open");
+
+      traces = [];
+      const used = new Set();
+      nodes.forEach((n, i) => {
+        const nearby = nodes
+          .map((m, j) => ({ j, d: Math.hypot(m.x - n.x, m.y - n.y) }))
+          .filter(e => e.j !== i && e.d < 80 && !used.has(`${Math.min(i, e.j)}-${Math.max(i, e.j)}`))
+          .sort((a, b) => a.d - b.d)
+          .slice(0, randInt(1, 3));
+
+        nearby.forEach(e => {
+          const key = `${Math.min(i, e.j)}-${Math.max(i, e.j)}`;
+          if (!used.has(key)) {
+            used.add(key);
+            const a = nodes[i], b = nodes[e.j];
+            const dx = b.x - a.x, dy = b.y - a.y;
+            const mx = a.x + dx * 0.5, my = a.y;
+            traces.push({
+              x1: a.x, y1: a.y,
+              mx, my,
+              x2: b.x, y2: b.y,
+              len: 0, maxLen: 1,
+              active: false,
+              alpha: 0.15 + Math.random() * 0.25
+            });
+          }
         });
+      });
+    }
+
+    function spawnPulse() {
+      if (traces.length === 0) return;
+      const t = traces[randInt(0, traces.length)];
+      pulses.push({ trace: t, t: 0, speed: 0.008 + Math.random() * 0.012 });
+    }
+
+    function drawNode(n) {
+      const a = 0.4 + n.bright * 0.6;
+      ctx.strokeStyle = `rgba(0,255,136,${a})`;
+      ctx.fillStyle = `rgba(0,255,136,${a * 0.3})`;
+      ctx.lineWidth = 0.8;
+
+      if (n.type === 'ic') {
+        ctx.beginPath();
+        ctx.rect(n.x - n.size * 2, n.y - n.size * 2, n.size * 4, n.size * 4);
+        ctx.fill();
+        ctx.stroke();
+        for (let i = 0; i < 3; i++) {
+          ctx.beginPath();
+          ctx.moveTo(n.x - n.size * 2 - 4, n.y - n.size + i * n.size);
+          ctx.lineTo(n.x - n.size * 2, n.y - n.size + i * n.size);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(n.x + n.size * 2, n.y - n.size + i * n.size);
+          ctx.lineTo(n.x + n.size * 2 + 4, n.y - n.size + i * n.size);
+          ctx.stroke();
+        }
+      } else if (n.type === 'via') {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.size + 2, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
       }
-    });
+    }
+
+    function getTracePoint(t, progress) {
+      const p = Math.min(progress, 1);
+      if (p <= 0.5) {
+        const s = p * 2;
+        return {
+          x: t.x1 + (t.mx - t.x1) * s,
+          y: t.y1 + (t.my - t.y1) * s
+        };
+      } else {
+        const s = (p - 0.5) * 2;
+        return {
+          x: t.mx + (t.x2 - t.mx) * s,
+          y: t.my + (t.y2 - t.my) * s
+        };
+      }
+    }
+
+    function drawTrace(t) {
+      ctx.beginPath();
+      ctx.moveTo(t.x1, t.y1);
+      ctx.lineTo(t.mx, t.my);
+      ctx.lineTo(t.x2, t.y2);
+      ctx.strokeStyle = `rgba(0,255,136,${t.alpha})`;
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+
+    function drawPulse(p) {
+      const pos = getTracePoint(p.trace, p.t);
+      const grd = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 10);
+      grd.addColorStop(0, 'rgba(0,255,170,0.9)');
+      grd.addColorStop(0.4, 'rgba(0,255,136,0.4)');
+      grd.addColorStop(1, 'rgba(0,255,136,0)');
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 10, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(200,255,230,0.95)';
+      ctx.fill();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#0a0f1e';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      traces.forEach(drawTrace);
+      nodes.forEach(n => {
+        n.bright = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame * 0.02 + n.x * 0.05));
+        drawNode(n);
+      });
+
+      if (frame % 18 === 0) spawnPulse();
+
+      pulses = pulses.filter(p => {
+        p.t += p.speed;
+        drawPulse(p);
+        return p.t < 1;
+      });
+
+      frame++;
+      requestAnimationFrame(animate);
+    }
+
+    generateGrid();
+    animate();
   </script>
-<canvas id="pcb-bg" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;"></canvas>
-<script>
-const canvas = document.getElementById('pcb-bg');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const GREEN = '#00ff88';
-const DIM = '#003322';
-const GLOW = '#00ffaa';
-
-let traces = [];
-let nodes = [];
-let pulses = [];
-let frame = 0;
-
-function randInt(a, b) { return Math.floor(Math.random() * (b - a)) + a; }
-
-function generateGrid() {
-  const cols = 22, rows = 16;
-  const cw = canvas.width / cols, ch = canvas.height / rows;
-  
-  nodes = [];
-  for (let r = 0; r < rows; r++) {
-    for (let c = 0; c < cols; c++) {
-      if (Math.random() > 0.55) {
-        nodes.push({
-          x: c * cw + cw/2 + randInt(-8, 8),
-          y: r * ch + ch/2 + randInt(-8, 8),
-          size: Math.random() > 0.85 ? 5 : Math.random() > 0.6 ? 3 : 2,
-          type: Math.random() > 0.9 ? 'ic' : Math.random() > 0.7 ? 'via' : 'pad',
-          bright: Math.random()
-        });
-      }
-    }
-  }
-
-  traces = [];
-  const used = new Set();
-  nodes.forEach((n, i) => {
-    const nearby = nodes
-      .map((m, j) => ({ j, d: Math.hypot(m.x - n.x, m.y - n.y) }))
-      .filter(e => e.j !== i && e.d < 80 && !used.has(`${Math.min(i,e.j)}-${Math.max(i,e.j)}`))
-      .sort((a,b) => a.d - b.d)
-      .slice(0, randInt(1,3));
-    
-    nearby.forEach(e => {
-      const key = `${Math.min(i,e.j)}-${Math.max(i,e.j)}`;
-      if (!used.has(key)) {
-        used.add(key);
-        const a = nodes[i], b = nodes[e.j];
-        const dx = b.x - a.x, dy = b.y - a.y;
-        const mx = a.x + dx * 0.5, my = a.y;
-        traces.push({
-          x1: a.x, y1: a.y,
-          mx, my,
-          x2: b.x, y2: b.y,
-          len: 0, maxLen: 1,
-          active: false,
-          alpha: 0.15 + Math.random() * 0.25
-        });
-      }
-    });
-  });
-}
-
-function spawnPulse() {
-  if (traces.length === 0) return;
-  const t = traces[randInt(0, traces.length)];
-  pulses.push({ trace: t, t: 0, speed: 0.008 + Math.random() * 0.012 });
-}
-
-function drawNode(n) {
-  const a = 0.4 + n.bright * 0.6;
-  ctx.strokeStyle = `rgba(0,255,136,${a})`;
-  ctx.fillStyle = `rgba(0,255,136,${a * 0.3})`;
-  ctx.lineWidth = 0.8;
-
-  if (n.type === 'ic') {
-    ctx.beginPath();
-    ctx.rect(n.x - n.size * 2, n.y - n.size * 2, n.size * 4, n.size * 4);
-    ctx.fill();
-    ctx.stroke();
-    for (let i = 0; i < 3; i++) {
-      ctx.beginPath();
-      ctx.moveTo(n.x - n.size * 2 - 4, n.y - n.size + i * n.size);
-      ctx.lineTo(n.x - n.size * 2, n.y - n.size + i * n.size);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(n.x + n.size * 2, n.y - n.size + i * n.size);
-      ctx.lineTo(n.x + n.size * 2 + 4, n.y - n.size + i * n.size);
-      ctx.stroke();
-    }
-  } else if (n.type === 'via') {
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, n.size + 2, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-  } else {
-    ctx.beginPath();
-    ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.stroke();
-  }
-}
-
-function getTracePoint(t, progress) {
-  const p = Math.min(progress, 1);
-  if (p <= 0.5) {
-    const s = p * 2;
-    return {
-      x: t.x1 + (t.mx - t.x1) * s,
-      y: t.y1 + (t.my - t.y1) * s
-    };
-  } else {
-    const s = (p - 0.5) * 2;
-    return {
-      x: t.mx + (t.x2 - t.mx) * s,
-      y: t.my + (t.y2 - t.my) * s
-    };
-  }
-}
-
-function drawTrace(t) {
-  ctx.beginPath();
-  ctx.moveTo(t.x1, t.y1);
-  ctx.lineTo(t.mx, t.my);
-  ctx.lineTo(t.x2, t.y2);
-  ctx.strokeStyle = `rgba(0,255,136,${t.alpha})`;
-  ctx.lineWidth = 0.8;
-  ctx.stroke();
-}
-
-function drawPulse(p) {
-  const pos = getTracePoint(p.trace, p.t);
-  const grd = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 10);
-  grd.addColorStop(0, 'rgba(0,255,170,0.9)');
-  grd.addColorStop(0.4, 'rgba(0,255,136,0.4)');
-  grd.addColorStop(1, 'rgba(0,255,136,0)');
-  ctx.fillStyle = grd;
-  ctx.beginPath();
-  ctx.arc(pos.x, pos.y, 10, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
-  ctx.fillStyle = 'rgba(200,255,230,0.95)';
-  ctx.fill();
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = '#0a0f1e';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  traces.forEach(drawTrace);
-  nodes.forEach(n => {
-    n.bright = 0.3 + 0.7 * (0.5 + 0.5 * Math.sin(frame * 0.02 + n.x * 0.05));
-    drawNode(n);
-  });
-
-  if (frame % 18 === 0) spawnPulse();
-
-  pulses = pulses.filter(p => {
-    p.t += p.speed;
-    drawPulse(p);
-    return p.t < 1;
-  });
-
-  frame++;
-  requestAnimationFrame(animate);
-}
-
-generateGrid();
-animate();
-</script>
 </body>
+
 </html>

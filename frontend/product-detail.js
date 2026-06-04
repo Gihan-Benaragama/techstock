@@ -13,13 +13,17 @@ function decodeJwtPayload(token) {
 const token = localStorage.getItem("token");
 const payload = token ? decodeJwtPayload(token) : null;
 
-const API_BASE_URL = "http://localhost:5001"; // Base URL for backend API
+let API_BASE_URL = "https://techstock-kxtz.onrender.com"; // Default production URL
+if (window.location && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
+  API_BASE_URL = 'http://localhost:5001';
+}
+if (window.location && (window.location.protocol === 'file:' || !window.location.hostname)) {
+  API_BASE_URL = 'http://localhost:5001';
+}
 
-const detailContainer = document.getElementById("productDetailContainer");
-const cartCount = document.getElementById("cartCount");
-const cartSidebar = document.getElementById("cartSidebar");
-const closeCartSidebar = document.getElementById("closeCartSidebar");
-const cartItemsDiv = document.getElementById("cartItems");
+
+
+
 const cartTotalDiv = document.getElementById("cartTotal");
 const cartItemCount = document.getElementById("cartItemCount");
 
@@ -33,11 +37,13 @@ const productId = urlParams.get('id');
 if (!productId) {
   detailContainer.innerHTML = '<p class="error-msg">Product ID missing in URL.</p>';
 } else {
-  fetch(`${API_BASE_URL}/products/${encodeURIComponent(productId)}`)
-    .then(res => {
-      if (!res.ok) throw new Error("Product not found");
-      return res.json();
-    })
+  fetch(`${API_BASE_URL}/products/${encodeURIComponent(productId)}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
+      })
+        .then(res => {
+          if (!res.ok) throw new Error("Product not found");
+          return res.json();
+        })
     .then(product => {
       renderProductDetails(product);
     })

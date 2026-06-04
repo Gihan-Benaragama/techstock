@@ -323,6 +323,10 @@
   min-height: 32px;
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   margin: 0;
   background: #fff;
@@ -330,16 +334,28 @@ body {
 }
 
 .dashboard-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
-  background: #000000;
-  border-bottom: 1px solid #222;
+  z-index: 1000;
+  background: #ffffff; /* changed to white */
+  border-bottom: 1px solid #e5e7eb; /* light gray */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 40px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  padding: 0 40px;
+  height: 60px; /* explicit height */
+}
+
+/* Ensure page content is not hidden behind fixed header */
+body {
+  margin: 0;
+  padding-top: 60px;
+  /* offset for fixed header */
+  background: #fff;
+  font-family: "Inter", "Manrope", Arial, sans-serif;
 }
 
 .dashboard-title {
@@ -349,7 +365,7 @@ body {
 }
 
 .dashboard-logo {
-  height: 35px;
+  height: 44px; /* increased logo size */
   width: auto;
   display: block;
   object-fit: contain;
@@ -357,23 +373,37 @@ body {
 
 .dashboard-nav {
   display: flex;
+  align-items: center;
   gap: 24px;
+  white-space: nowrap;
 }
 
 .dashboard-nav a {
   text-decoration: none;
-  color: #fff;
-  font-weight: 500;
+  color: #111827; /* dark text for nav options */
+  font-weight: 600;
   font-size: 1.05rem;
-  padding-bottom: 2px;
-  border-bottom: 2px solid transparent;
-  transition: border 0.2s, color 0.2s;
+  display: inline-block;
+  padding: 8px 12px 5px 12px; /* 8px top, 12px left/right, 5px bottom to make 13px total with border */
+  border-bottom: 3px solid transparent; /* invisible border to reserve space */
+  border-radius: 10px 10px 0 0;
+  box-sizing: border-box;
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
 }
 
-.dashboard-nav a.active,
+/* Hover state */
 .dashboard-nav a:hover {
   color: #e60044;
-  border-bottom: 2px solid #e60044;
+  transform: translateY(-2px);
+}
+
+/* Active (selected) nav item - visible until changed */
+.dashboard-nav a.active {
+  color: #e60044; /* active color */
+  border-bottom-color: #e60044; /* visible underline */
+  background: none; /* no pill background */
+  box-shadow: none;
+  transform: none;
 }
 
 .dashboard-actions {
@@ -389,22 +419,22 @@ body {
 .dashboard-search {
   padding: 8px 16px;
   border-radius: 20px;
-  border: 1px solid #444;
+  border: 1px solid #d1d5db;
   font-size: 0.95rem;
-  background: #111;
-  color: #fff;
+  background: #ffffff; /* changed to white */
+  color: #111827; /* dark text */
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  width: 200px;
+  width: 220px; /* slightly wider for improved usability */
 }
 
 .dashboard-search::placeholder {
-  color: #888;
+  color: #9ca3af;
 }
 
 .dashboard-search:focus {
-  border-color: #fff;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  border-color: #111827;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.08);
 }
 
 /* Dropdown Container */
@@ -430,14 +460,17 @@ body {
 .search-results-dropdown::-webkit-scrollbar {
   width: 6px;
 }
+
 .search-results-dropdown::-webkit-scrollbar-track {
   background: #111;
   border-radius: 12px;
 }
+
 .search-results-dropdown::-webkit-scrollbar-thumb {
   background: #444;
   border-radius: 12px;
 }
+
 .search-results-dropdown::-webkit-scrollbar-thumb:hover {
   background: #666;
 }
@@ -459,7 +492,7 @@ body {
 .search-results-dropdown .product-card:hover {
   transform: translateY(-2px);
   border-color: #555;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .search-results-dropdown .product-card img {
@@ -626,6 +659,55 @@ body {
   margin-top: 24px;
 }
 
+/* Pagination styles */
+.pagination {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin: 28px 0 8px 0;
+}
+.pagination .page-btn {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  color: #111827;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.pagination .page-btn:hover { background: #f8fafc; }
+.pagination .page-btn[disabled] { opacity: 0.45; cursor: default; }
+.pagination .page-btn.active {
+  border-color: transparent;
+  border-bottom: 3px solid #e60044;
+  color: #e60044;
+  background: transparent;
+}
+
+.pagination .ellipsis {
+  color: #6b7280;
+  padding: 0 8px;
+  font-size: 1.1rem;
+}
+
+/* Make products list overlap the hero section visually (cards appear on top of hero image) */
+#productsList {
+  margin-top: -320px; /* pulled up more so product cards sit higher over hero */
+  position: relative;
+  z-index: 6;
+}
+
+@media (max-width: 768px) {
+  /* small screens: slightly increased overlap but kept reasonable */
+  #productsList { margin-top: -100px; }
+}
+
+/* Ensure product cards render above hero and have elevated shadow */
+.category-card, .product-card {
+  z-index: 7;
+  position: relative;
+}
+
 .product-card {
   background: #fff;
   border-radius: 12px;
@@ -648,6 +730,46 @@ body {
   height: 300px;
   object-fit: cover;
 }
+
+/* Entrance animation for product cards */
+.product-card.animate-in {
+  opacity: 0;
+  transform: translateY(18px) scale(0.995);
+  animation: cardEnter 520ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+@keyframes cardEnter {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Hover interactions for product cards and images */
+.product-card:hover {
+  box-shadow: 0 18px 42px rgba(2,6,23,0.12);
+  transform: translateY(-6px);
+}
+
+.product-image-container { overflow: hidden; width: 100%; }
+.product-image-container img { transition: transform 420ms cubic-bezier(.2,.8,.2,1), filter 320ms; transform-origin: center; }
+.product-image-container:hover img.primary { transform: scale(1.06) rotate(-0.6deg); }
+.product-image-container:hover img.secondary { transform: scale(1.08) translateY(-6px); opacity: 0.95; }
+
+/* Subtle tilt/3D effect */
+.product-card { perspective: 800px; }
+.product-card .product-image-container { transform-style: preserve-3d; }
+
+/* Nav item micro-interactions */
+.dashboard-nav a { transition: color 160ms ease, transform 120ms ease; }
+.dashboard-nav a:hover { transform: translateY(-3px) scale(1.02); }
+
+/* Small stagger for nav on load */
+.dashboard-nav.animate-in a { opacity: 0; transform: translateY(-6px); }
+.dashboard-nav.animate-in a:nth-child(1){ animation: navPop 360ms ease 0.04s forwards; }
+.dashboard-nav.animate-in a:nth-child(2){ animation: navPop 360ms ease 0.08s forwards; }
+.dashboard-nav.animate-in a:nth-child(3){ animation: navPop 360ms ease 0.12s forwards; }
+.dashboard-nav.animate-in a:nth-child(4){ animation: navPop 360ms ease 0.16s forwards; }
+.dashboard-nav.animate-in a:nth-child(5){ animation: navPop 360ms ease 0.20s forwards; }
+
+@keyframes navPop { to { opacity: 1; transform: translateY(0) } }
 
 .product-name {
   font-weight: bold;
@@ -686,15 +808,15 @@ body {
   box-sizing: border-box;
 }
 
-html,
-body {
-  margin: 0;
-  min-height: 100%;
-  font-family: "Manrope", sans-serif;
+html {
+  overflow-y: scroll; /* ALWAYS show scrollbar → prevents shifting */
+  scroll-behavior: smooth; /* smooth scroll for navigation */
 }
 
 body {
-  min-height: 100vh;
+  margin: 0;
+  padding-top: 60px;
+  /* already good for fixed navbar */
 }
 
 .scene {
@@ -872,6 +994,18 @@ input {
 }
 
 /* Premium Product Hover Image Transitions */
+.hero {
+  text-align: center;
+}
+
+.cta-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  animation: fadeInUp 1s ease-out 0.4s forwards;
+  opacity: 0;
+}
+
 .product-image-container {
   position: relative;
   width: 100%;
@@ -1806,4 +1940,3 @@ input {
   color: #64748b;
   word-break: break-all;
 }
-

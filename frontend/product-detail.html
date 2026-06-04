@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,32 +8,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
+
 <body>
   <!-- Header Navbar -->
   <header class="dashboard-header">
     <div style="display:flex; align-items:center; gap:10px;">
       <button id="mobileMenuBtn" class="hamburger-btn mobile-only">☰</button>
-      <img src="./images/download.png" alt="Logo" class="dashboard-logo" style="cursor:pointer;" onclick="window.location.href='user-dashboard.html'" />
+      <img src="./images/download.png" alt="Logo" class="dashboard-logo" style="cursor:pointer;"
+        onclick="window.location.href='index.html'" />
     </div>
     <nav class="dashboard-nav desktop-only">
-      <a href="user-dashboard.html">Home</a>
-      <a href="#">Shop All</a>
-      <a href="#">New Arrivals</a>
-      <a href="#">Best Sellers</a>
-      <a href="#">About</a>
+      <a href="index.html">Home</a>
+      <a href="user-dashboard.html">Shop All</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a href="best-sellers.html">Best Sellers</a>
+      <a href="about.html">About</a>
     </nav>
     <div class="dashboard-actions">
+      <div class="search-container desktop-only">
+        <input type="text" id="searchInput" placeholder="Search" class="dashboard-search" />
+        <div id="searchResults" class="search-results-dropdown" style="display: none;"></div>
+      </div>
       <button id="cartBtn" class="dashboard-cart" title="View Cart">
         <span class="cart-icon">🛒</span>
         <span id="cartCount" class="cart-count">0</span>
       </button>
-      <div id="profileMenuContainer" class="profile-menu-container desktop-only">
+      <!-- Login button shown when NOT logged in -->
+      <a id="headerLoginBtn" href="login.html" class="header-login-btn desktop-only" style="display:none;">Login</a>
+      <!-- Profile menu shown when logged in -->
+      <div id="profileMenuContainer" class="profile-menu-container desktop-only" style="display:none;">
         <button id="profileBtn" class="profile-btn" aria-label="User profile">
-          <img id="profileAvatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>" alt="Avatar" class="profile-avatar" />
+          <img id="profileAvatar"
+            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+            alt="Avatar" class="profile-avatar" />
         </button>
         <div id="profileDropdown" class="profile-dropdown" style="display: none;">
           <div class="profile-dropdown-header">
-            <img id="dropdownAvatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>" alt="Avatar" class="dropdown-avatar" />
+            <img id="dropdownAvatar"
+              src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+              alt="Avatar" class="dropdown-avatar" />
             <div class="profile-info">
               <h4 id="profileName">User Name</h4>
               <p id="profileEmail">user@example.com</p>
@@ -56,12 +70,14 @@
     <input type="text" placeholder="Search products..." class="mobile-drawer-search" />
     <nav class="mobile-drawer-nav">
       <a href="user-dashboard.html">Home</a>
-      <a href="#">Shop All</a>
-      <a href="#">New Arrivals</a>
-      <a href="#">Best Sellers</a>
-      <a href="#">About</a>
+      <a href="user-dashboard.html">Shop All</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a href="best-sellers.html">Best Sellers</a>
+      <a href="about.html">About</a>
       <div class="mobile-profile-section">
-        <img id="mobileAvatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>" alt="Avatar" class="mobile-avatar" />
+        <img id="mobileAvatar"
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+          alt="Avatar" class="mobile-avatar" />
         <div class="mobile-profile-info">
           <h4 id="mobileName">User Name</h4>
           <p id="mobileEmail">user@example.com</p>
@@ -102,6 +118,8 @@
   </main>
 
   <script src="./product-detail.js"></script>
-    <script src="./user-dashboard.js"></script>
+  <script src="./header.js"></script>
+  <script src="./nav-active.js"></script>
 </body>
+
 </html>

@@ -156,3 +156,16 @@ export async function loginUser(req, res) {
              res.status(500).json({ message: "Error during Google login." });
          }
      }
+
+     export async function getAllUsers(req, res) {
+         if (!isAdmin(req)) {
+             return res.status(403).json({ message: "Access denied. Admins only." });
+         }
+         try {
+             const users = await User.find({}, "-password");
+             res.json(users);
+         } catch (error) {
+             console.error("Error fetching users:", error);
+             res.status(500).json({ message: "Error fetching users." });
+         }
+     }
