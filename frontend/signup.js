@@ -29,7 +29,7 @@ form.addEventListener("submit", async (event) => {
     const data = await response.json();
     if (response.ok) {
       setStatus("Registration successful! Logging in...", "success");
-      
+
       try {
         // Automatically authenticate the newly signed-up user
         const loginResponse = await fetch(`${API_BASE_URL}/users/login`, {
@@ -37,17 +37,17 @@ form.addEventListener("submit", async (event) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
         });
-        
+
         const loginData = await loginResponse.json();
-        
+
         if (loginResponse.ok && loginData.token) {
           localStorage.setItem("token", loginData.token);
-          
+
           // Decode the token payload
           const payloadPart = loginData.token.split(".")[1];
           const base64 = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
           const payload = JSON.parse(atob(base64));
-          
+
           setStatus("Login successful! Redirecting...", "success");
           setTimeout(() => {
             if (payload?.isAdmin) {
@@ -61,7 +61,7 @@ form.addEventListener("submit", async (event) => {
       } catch (loginErr) {
         console.error("Auto-login failed:", loginErr);
       }
-      
+
       // Fallback redirection to login page if auto-login fails
       setStatus("Registration successful! Redirecting to login...", "success");
       setTimeout(() => {

@@ -122,8 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="detail-price-wrap">
             <div class="detail-price">Rs. ${product.price?.toLocaleString()}</div>
             ${product.labelledPrice > product.price
-              ? `<div class="detail-price-labelled">Rs. ${product.labelledPrice?.toLocaleString()}</div>`
-              : ''}
+        ? `<div class="detail-price-labelled">Rs. ${product.labelledPrice?.toLocaleString()}</div>`
+        : ''}
           </div>
 
           <div class="detail-stock-wrap">${stockHtml}</div>
@@ -135,10 +135,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
           <div class="detail-actions-wrap">
             ${isOutOfStock
-              ? `<div class="detail-buttons-group">
+        ? `<div class="detail-buttons-group">
                    <button class="detail-add-btn disabled" disabled>Out of Stock</button>
                  </div>`
-              : `<div class="qty-counter">
+        : `<div class="qty-counter">
                    <button onclick="changeQtyValue(-1)">-</button>
                    <input type="text" id="detailQty" value="1" readonly />
                    <button onclick="changeQtyValue(1)">+</button>
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
                    <button class="detail-add-btn" id="detailAddBtn">Add to Cart</button>
                    <button class="detail-buy-btn" id="detailBuyBtn">Buy Now</button>
                  </div>`
-            }
+      }
           </div>
         </div>
       </div>

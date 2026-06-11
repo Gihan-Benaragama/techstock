@@ -28,7 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const token = localStorage.getItem("token");
   const payload = token ? decodeJwtPayload(token) : null;
-  const API_BASE_URL = "http://localhost:5001";
+  const API_BASE_URL = "https://techstock-tld1.onrender.com";
+
 
   function setActionStatus(message, type = "") {
     actionStatusEl.textContent = message;
@@ -59,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function addImageInputRow(value = "", isFirst = false) {
     if (!imageUrlsContainer) return;
-    
+
     const row = document.createElement("div");
     row.className = "image-input-row";
     row.style.display = "flex";
@@ -101,13 +102,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // --- Helper function stubs (if not defined elsewhere) ---
   if (typeof cleanObject !== "function") {
-    window.cleanObject = function(obj) {
+    window.cleanObject = function (obj) {
       // Remove undefined values
       return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== undefined));
     };
   }
   if (typeof setActiveSection !== "function") {
-    window.setActiveSection = function(sectionId) {
+    window.setActiveSection = function (sectionId) {
       // Hide all, show one
       for (const section of contentSections) {
         section.style.display = section.id === sectionId ? "block" : "none";
@@ -115,17 +116,17 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
   if (typeof openAddProductForm !== "function") {
-    window.openAddProductForm = function() {
+    window.openAddProductForm = function () {
       addProductPanel?.classList.remove("hidden-action");
     };
   }
   if (typeof closeAddProductForm !== "function") {
-    window.closeAddProductForm = function() {
+    window.closeAddProductForm = function () {
       addProductPanel?.classList.add("hidden-action");
     };
   }
   if (typeof resetCreateFormToAddMode !== "function") {
-    window.resetCreateFormToAddMode = function() {
+    window.resetCreateFormToAddMode = function () {
       if (!createProductForm) return;
       createProductForm.reset();
       createProductForm.elements.editingProductId.value = "";
@@ -133,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (saveProductBtn) saveProductBtn.textContent = "Save Product";
       const formPanelTitle = document.getElementById("formPanelTitle");
       if (formPanelTitle) formPanelTitle.textContent = "Add New Product";
-      
+
       // Reset dynamic image URL list to one empty row
       if (imageUrlsContainer) {
         imageUrlsContainer.innerHTML = "";
@@ -144,80 +145,80 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
 
-function openCreateFormForEdit(product) {
-  openAddProductForm();
+  function openCreateFormForEdit(product) {
+    openAddProductForm();
 
-  const formPanelTitle = document.getElementById("formPanelTitle");
-  if (formPanelTitle) formPanelTitle.textContent = "Edit Product";
+    const formPanelTitle = document.getElementById("formPanelTitle");
+    if (formPanelTitle) formPanelTitle.textContent = "Edit Product";
 
-  createProductForm.elements.editingProductId.value = product.productId || "";
-  createProductForm.elements.productId.value = product.productId || "";
-  createProductForm.elements.productId.readOnly = true;
-  createProductForm.elements.name.value = product.name || "";
-  createProductForm.elements.price.value = product.price ?? "";
-  createProductForm.elements.labelledPrice.value = product.labelledPrice ?? "";
-  createProductForm.elements.stock.value = product.stock ?? "";
-  createProductForm.elements.brand.value = product.brand || "";
-  createProductForm.elements.model.value = product.model || "";
-  createProductForm.elements.category.value = product.category || "";
-  createProductForm.elements.description.value = product.description || "";
-  createProductForm.elements.altNames.value = Array.isArray(product.altNames) ? product.altNames.join(", ") : "";
-  
-  // Populate image URL rows dynamically
-  if (imageUrlsContainer) {
-    imageUrlsContainer.innerHTML = "";
-    const arr = (Array.isArray(product.images) && product.images.length > 0) ? product.images : [""];
-    arr.forEach((url, idx) => {
-      addImageInputRow(url, idx === 0);
-    });
-  }
+    createProductForm.elements.editingProductId.value = product.productId || "";
+    createProductForm.elements.productId.value = product.productId || "";
+    createProductForm.elements.productId.readOnly = true;
+    createProductForm.elements.name.value = product.name || "";
+    createProductForm.elements.price.value = product.price ?? "";
+    createProductForm.elements.labelledPrice.value = product.labelledPrice ?? "";
+    createProductForm.elements.stock.value = product.stock ?? "";
+    createProductForm.elements.brand.value = product.brand || "";
+    createProductForm.elements.model.value = product.model || "";
+    createProductForm.elements.category.value = product.category || "";
+    createProductForm.elements.description.value = product.description || "";
+    createProductForm.elements.altNames.value = Array.isArray(product.altNames) ? product.altNames.join(", ") : "";
 
-  if (saveProductBtn) {
-    saveProductBtn.textContent = "Update Product";
-  }
-
-  cancelEditBtn?.classList.remove("hidden-action");
-}
-
-async function fetchProducts() {
-  try {
-    setActionStatus("Loading current products...");
-    const response = await fetch(`${API_BASE_URL}/products`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || "Failed to load products");
+    // Populate image URL rows dynamically
+    if (imageUrlsContainer) {
+      imageUrlsContainer.innerHTML = "";
+      const arr = (Array.isArray(product.images) && product.images.length > 0) ? product.images : [""];
+      arr.forEach((url, idx) => {
+        addImageInputRow(url, idx === 0);
+      });
     }
 
-    const productList = data.products || [];
+    if (saveProductBtn) {
+      saveProductBtn.textContent = "Update Product";
+    }
 
-    productsTableBody.innerHTML = "";
-    for (const product of productList) {
-      const row = document.createElement("tr");
-      // Status badge
-      let statusHtml = '';
-      if (product.stock <= 5) {
-        statusHtml = '<span class="badge badge-amber">Low Stock</span>';
-      } else if (product.isAvailable) {
-        statusHtml = '<span class="badge badge-green">Active</span>';
-      } else {
-        statusHtml = '<span class="badge">Inactive</span>';
+    cancelEditBtn?.classList.remove("hidden-action");
+  }
+
+  async function fetchProducts() {
+    try {
+      setActionStatus("Loading current products...");
+      const response = await fetch(`${API_BASE_URL}/products`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to load products");
       }
-      // Product image (first image)
-      let imageHtml = '';
-      if (Array.isArray(product.images) && product.images[0]) {
-        imageHtml = `<img src="${product.images[0]}" alt="Product Image" style="max-width:48px;max-height:48px;border-radius:6px;">`;
-      }
-      // Actions
-      const rowActionsHtml = `<div class="row-actions">
+
+      const productList = data.products || [];
+
+      productsTableBody.innerHTML = "";
+      for (const product of productList) {
+        const row = document.createElement("tr");
+        // Status badge
+        let statusHtml = '';
+        if (product.stock <= 5) {
+          statusHtml = '<span class="badge badge-amber">Low Stock</span>';
+        } else if (product.isAvailable) {
+          statusHtml = '<span class="badge badge-green">Active</span>';
+        } else {
+          statusHtml = '<span class="badge">Inactive</span>';
+        }
+        // Product image (first image)
+        let imageHtml = '';
+        if (Array.isArray(product.images) && product.images[0]) {
+          imageHtml = `<img src="${product.images[0]}" alt="Product Image" style="max-width:48px;max-height:48px;border-radius:6px;">`;
+        }
+        // Actions
+        const rowActionsHtml = `<div class="row-actions">
         <button type="button" class="mini-btn edit-btn" data-product-id="${product.productId || ''}">Edit</button>
         <button type="button" class="mini-btn del quick-delete-btn" data-product-id="${product.productId || ''}">Delete</button>
       </div>`;
-      row.innerHTML = `
+        row.innerHTML = `
         <td>${imageHtml}</td>
         <td style="font-weight:600;">${product.name || ''}</td>
         <td style="color:#64748b;">${product.productId || ''}</td>
@@ -229,77 +230,77 @@ async function fetchProducts() {
         <td>${statusHtml}</td>
         <td>${rowActionsHtml}</td>
       `;
-      // Edit/Delete events
-      const editBtn = row.querySelector(".edit-btn");
-      const quickDeleteBtn = row.querySelector(".quick-delete-btn");
-      editBtn?.addEventListener("click", () => {
-        setActiveSection("productsSection");
-        openCreateFormForEdit(product);
-      });
-      quickDeleteBtn?.addEventListener("click", async () => {
-        if (!product.productId) return;
-        const confirmDelete = confirm(`Are you sure you want to delete product "${product.name || product.productId}"?`);
-        if (!confirmDelete) return;
-        try {
-          await sendProductRequest(`${API_BASE_URL}/products/${encodeURIComponent(product.productId)}`, "DELETE");
-          alert("Product deleted successfully.");
-          setActionStatus(`Product ${product.productId} deleted successfully.`, "success");
-          await fetchProducts();
-        } catch (error) {
-          setActionStatus(error.message, "error");
-        }
-      });
-      productsTableBody.appendChild(row);
-    }
-    if (productList.length === 0) {
-      const emptyRow = document.createElement("tr");
-      emptyRow.innerHTML = '<td colspan="10">No products found.</td>';
-      productsTableBody.appendChild(emptyRow);
-    }
+        // Edit/Delete events
+        const editBtn = row.querySelector(".edit-btn");
+        const quickDeleteBtn = row.querySelector(".quick-delete-btn");
+        editBtn?.addEventListener("click", () => {
+          setActiveSection("productsSection");
+          openCreateFormForEdit(product);
+        });
+        quickDeleteBtn?.addEventListener("click", async () => {
+          if (!product.productId) return;
+          const confirmDelete = confirm(`Are you sure you want to delete product "${product.name || product.productId}"?`);
+          if (!confirmDelete) return;
+          try {
+            await sendProductRequest(`${API_BASE_URL}/products/${encodeURIComponent(product.productId)}`, "DELETE");
+            alert("Product deleted successfully.");
+            setActionStatus(`Product ${product.productId} deleted successfully.`, "success");
+            await fetchProducts();
+          } catch (error) {
+            setActionStatus(error.message, "error");
+          }
+        });
+        productsTableBody.appendChild(row);
+      }
+      if (productList.length === 0) {
+        const emptyRow = document.createElement("tr");
+        emptyRow.innerHTML = '<td colspan="10">No products found.</td>';
+        productsTableBody.appendChild(emptyRow);
+      }
 
-    setActionStatus("Current products loaded.", "success");
-  } catch (error) {
-    setActionStatus(error.message, "error");
+      setActionStatus("Current products loaded.", "success");
+    } catch (error) {
+      setActionStatus(error.message, "error");
+    }
   }
-}
 
-async function sendProductRequest(url, method, body) {
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: body ? JSON.stringify(body) : undefined
-  });
+  async function sendProductRequest(url, method, body) {
+    const response = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: body ? JSON.stringify(body) : undefined
+    });
 
-  let data = null;
-  const contentType = response.headers.get("content-type") || "";
-  if (contentType.includes("application/json")) {
-    data = await response.json();
+    let data = null;
+    const contentType = response.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      data = { message: text || response.statusText };
+    }
+
+    if (!response.ok) {
+      throw new Error(data?.message || `Request failed with status ${response.status}`);
+    }
+    return data;
+  }
+
+  if (!payload || !payload.isAdmin) {
+    tokenStateEl.textContent = "Invalid";
+    localStorage.removeItem("token");
+    window.location.href = "login.html";
   } else {
-    const text = await response.text();
-    data = { message: text || response.statusText };
+    const fullName = `${payload.firstName || ""} ${payload.lastName || ""}`.trim();
+    adminNameEl.textContent = fullName ? `Welcome, ${fullName}` : "Welcome, Admin";
+    adminEmailEl.textContent = payload.email || "";
+    tokenStateEl.textContent = "Valid";
+
+    fetchProducts();
   }
-
-  if (!response.ok) {
-    throw new Error(data?.message || `Request failed with status ${response.status}`);
-  }
-  return data;
-}
-
-if (!payload || !payload.isAdmin) {
-  tokenStateEl.textContent = "Invalid";
-  localStorage.removeItem("token");
-  window.location.href = "login.html";
-} else {
-  const fullName = `${payload.firstName || ""} ${payload.lastName || ""}`.trim();
-  adminNameEl.textContent = fullName ? `Welcome, ${fullName}` : "Welcome, Admin";
-  adminEmailEl.textContent = payload.email || "";
-  tokenStateEl.textContent = "Valid";
-
-  fetchProducts();
-}
 
   const ordersTableBody = document.getElementById("ordersTableBody");
   const refreshOrdersBtn = document.getElementById("refreshOrdersBtn");
@@ -315,7 +316,7 @@ if (!payload || !payload.isAdmin) {
   closeOrderModalBtn?.addEventListener("click", () => {
     if (orderDetailsModal) orderDetailsModal.style.display = "none";
   });
-  
+
   orderDetailsModal?.addEventListener("click", (e) => {
     if (e.target === orderDetailsModal) {
       orderDetailsModal.style.display = "none";
@@ -329,10 +330,10 @@ if (!payload || !payload.isAdmin) {
 
     const productsRows = Array.isArray(order.products)
       ? order.products.map(p => {
-          const price = p.price || 0;
-          const qty = p.quantity || 1;
-          const total = price * qty;
-          return `
+        const price = p.price || 0;
+        const qty = p.quantity || 1;
+        const total = price * qty;
+        return `
             <tr>
               <td style="font-weight:600;color:#0f172a;">${p.name}</td>
               <td style="color:#64748b;">${p.productID || 'N/A'}</td>
@@ -341,10 +342,10 @@ if (!payload || !payload.isAdmin) {
               <td style="font-weight:600;text-align: right;color:#0f172a;">Rs. ${total.toLocaleString()}</td>
             </tr>
           `;
-        }).join('')
+      }).join('')
       : '<tr><td colspan="5">No products listed.</td></tr>';
 
-    const subtotal = order.totalPrice || 0; 
+    const subtotal = order.totalPrice || 0;
     const note = order.note || "";
     let shippingMethod = "Standard";
     let shippingCost = 200;
@@ -352,7 +353,7 @@ if (!payload || !payload.isAdmin) {
       shippingMethod = "Express";
       shippingCost = 500;
     }
-    
+
     const calculatedSubtotal = Array.isArray(order.products)
       ? order.products.reduce((sum, p) => sum + (p.price * p.quantity), 0)
       : subtotal - shippingCost;
@@ -456,7 +457,7 @@ if (!payload || !payload.isAdmin) {
     try {
       setActionStatus("Loading customer orders...");
       ordersTableBody.innerHTML = '<tr><td colspan="8">Loading orders...</td></tr>';
-      
+
       const response = await fetch(`${API_BASE_URL}/orders`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -473,7 +474,7 @@ if (!payload || !payload.isAdmin) {
         const row = document.createElement("tr");
 
         const orderDate = order.date ? new Date(order.date).toLocaleDateString() : "";
-        const productsHtml = Array.isArray(order.products) 
+        const productsHtml = Array.isArray(order.products)
           ? order.products.map(p => `${p.name} (x${p.quantity})`).join("<br />")
           : "";
 
@@ -482,7 +483,7 @@ if (!payload || !payload.isAdmin) {
         if (status === "Pending") badgeClass += " badge-amber";
         else if (status === "Processing") badgeClass += " badge-blue";
         else if (status === "Completed") badgeClass += " badge-green";
-        
+
         let actionBtnHtml = "";
         if (status === "Pending") {
           actionBtnHtml = `<button type="button" class="mini-btn process-btn" data-order-id="${order.id}">Process</button>`;
@@ -546,56 +547,56 @@ if (!payload || !payload.isAdmin) {
     }
   }
 
-      async function fetchCustomers() {
-        if (!customersTableBody) return;
-        if (!token) {
-          // No token: redirect to login
-          window.location.href = "login.html";
-          return;
+  async function fetchCustomers() {
+    if (!customersTableBody) return;
+    if (!token) {
+      // No token: redirect to login
+      window.location.href = "login.html";
+      return;
+    }
+    try {
+      setActionStatus("Loading customers directory...");
+      customersTableBody.innerHTML = '<tr><td colspan="7">Loading customers...</td></tr>';
+
+      const response = await fetch(`${API_BASE_URL}/api/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`
         }
-        try {
-          setActionStatus("Loading customers directory...");
-          customersTableBody.innerHTML = '<tr><td colspan="7">Loading customers...</td></tr>';
-  
-          const response = await fetch(`${API_BASE_URL}/api/users`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-  
-          if (!response.ok) {
-            const contentType = response.headers.get('content-type') || '';
-            let errMsg = '';
-            if (contentType.includes('application/json')) {
-              const errData = await response.json();
-              errMsg = errData.message || response.statusText;
-            } else {
-              errMsg = await response.text();
-            }
-            throw new Error(errMsg);
-          }
-  
-          const data = await response.json();
-  
-          customersTableBody.innerHTML = "";
-          for (const customer of data) {
-            const row = document.createElement("tr");
-            const verifiedHtml = customer.isEmailVerified 
-              ? '<span class="badge badge-green">Yes</span>' 
-              : '<span class="badge">No</span>';
-            const blockedHtml = customer.isBlocked 
-              ? '<span class="badge badge-amber">Blocked</span>' 
-              : '<span class="badge badge-green">Active</span>';
-            const roleHtml = customer.isAdmin 
-              ? '<span class="badge badge-blue">Admin</span>' 
-              : '<span class="badge">User</span>';
-            let avatarHtml = '';
-            if (customer.image) {
-              avatarHtml = `<img src="${customer.image}" alt="Avatar" style="max-width:32px;max-height:32px;border-radius:50%;object-fit:cover;">`;
-            } else {
-              avatarHtml = `<div style="width:32px;height:32px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:700;color:#475569;font-size:0.8rem;">${(customer.firstName || 'U')[0].toUpperCase()}</div>`;
-            }
-            row.innerHTML = `
+      });
+
+      if (!response.ok) {
+        const contentType = response.headers.get('content-type') || '';
+        let errMsg = '';
+        if (contentType.includes('application/json')) {
+          const errData = await response.json();
+          errMsg = errData.message || response.statusText;
+        } else {
+          errMsg = await response.text();
+        }
+        throw new Error(errMsg);
+      }
+
+      const data = await response.json();
+
+      customersTableBody.innerHTML = "";
+      for (const customer of data) {
+        const row = document.createElement("tr");
+        const verifiedHtml = customer.isEmailVerified
+          ? '<span class="badge badge-green">Yes</span>'
+          : '<span class="badge">No</span>';
+        const blockedHtml = customer.isBlocked
+          ? '<span class="badge badge-amber">Blocked</span>'
+          : '<span class="badge badge-green">Active</span>';
+        const roleHtml = customer.isAdmin
+          ? '<span class="badge badge-blue">Admin</span>'
+          : '<span class="badge">User</span>';
+        let avatarHtml = '';
+        if (customer.image) {
+          avatarHtml = `<img src="${customer.image}" alt="Avatar" style="max-width:32px;max-height:32px;border-radius:50%;object-fit:cover;">`;
+        } else {
+          avatarHtml = `<div style="width:32px;height:32px;border-radius:50%;background:#e2e8f0;display:flex;align-items:center;justify-content:center;font-weight:700;color:#475569;font-size:0.8rem;">${(customer.firstName || 'U')[0].toUpperCase()}</div>`;
+        }
+        row.innerHTML = `
               <td>${avatarHtml}</td>
               <td style="font-weight:600;">${customer.firstName || ""}</td>
               <td style="font-weight:600;">${customer.lastName || ""}</td>
@@ -604,19 +605,19 @@ if (!payload || !payload.isAdmin) {
               <td>${blockedHtml}</td>
               <td>${roleHtml}</td>
             `;
-            customersTableBody.appendChild(row);
-          }
-          if (data.length === 0) {
-            customersTableBody.innerHTML = '<tr><td colspan="7">No customers found.</td></tr>';
-          }
-          setActionStatus("Customers directory loaded.", "success");
-        } catch (error) {
-          setActionStatus(error.message, "error");
-          if (customersTableBody) {
-            customersTableBody.innerHTML = `<tr><td colspan="7" style="color:#b91c1c;">Error: ${error.message}</td></tr>`;
-          }
-        }
+        customersTableBody.appendChild(row);
       }
+      if (data.length === 0) {
+        customersTableBody.innerHTML = '<tr><td colspan="7">No customers found.</td></tr>';
+      }
+      setActionStatus("Customers directory loaded.", "success");
+    } catch (error) {
+      setActionStatus(error.message, "error");
+      if (customersTableBody) {
+        customersTableBody.innerHTML = `<tr><td colspan="7" style="color:#b91c1c;">Error: ${error.message}</td></tr>`;
+      }
+    }
+  }
 
   refreshOrdersBtn?.addEventListener("click", fetchOrders);
   refreshCustomersBtn?.addEventListener("click", fetchCustomers);
@@ -648,87 +649,87 @@ if (!payload || !payload.isAdmin) {
 
 
 
-createProductForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const formData = new FormData(createProductForm);
+  createProductForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(createProductForm);
 
-  const productId = String(formData.get("productId") || "").trim();
-  const editingProductId = String(formData.get("editingProductId") || "").trim();
-  const name = String(formData.get("name") || "").trim();
-  const price = Number(formData.get("price"));
-  const labelledPrice = Number(formData.get("labelledPrice"));
-  const stock = Number(formData.get("stock"));
+    const productId = String(formData.get("productId") || "").trim();
+    const editingProductId = String(formData.get("editingProductId") || "").trim();
+    const name = String(formData.get("name") || "").trim();
+    const price = Number(formData.get("price"));
+    const labelledPrice = Number(formData.get("labelledPrice"));
+    const stock = Number(formData.get("stock"));
 
-  if (!productId || !name) {
-    setActionStatus("Product ID and Name are required.", "error");
-    return;
-  }
+    if (!productId || !name) {
+      setActionStatus("Product ID and Name are required.", "error");
+      return;
+    }
 
-  if (!Number.isFinite(price) || !Number.isFinite(labelledPrice) || !Number.isFinite(stock)) {
-    setActionStatus("Price, Labelled Price and Stock must be valid numbers.", "error");
-    return;
-  }
+    if (!Number.isFinite(price) || !Number.isFinite(labelledPrice) || !Number.isFinite(stock)) {
+      setActionStatus("Price, Labelled Price and Stock must be valid numbers.", "error");
+      return;
+    }
 
-  const imageInputs = document.querySelectorAll(".product-image-input");
-  const images = Array.from(imageInputs)
-    .map(input => input.value.trim())
-    .filter(Boolean);
+    const imageInputs = document.querySelectorAll(".product-image-input");
+    const images = Array.from(imageInputs)
+      .map(input => input.value.trim())
+      .filter(Boolean);
 
-  if (images.length === 0) {
-    setActionStatus("At least one product image URL is required.", "error");
-    return;
-  }
-  const body = cleanObject({
-    productId,
-    name,
-    price,
-    labelledPrice,
-    stock,
-    brand: String(formData.get("brand") || "").trim() || undefined,
-    model: String(formData.get("model") || "").trim() || undefined,
-    category: String(formData.get("category") || "").trim() || undefined,
-    description: String(formData.get("description") || "").trim() || undefined,
-    altNames: toArray(String(formData.get("altNames") || "")),
-    images: images
+    if (images.length === 0) {
+      setActionStatus("At least one product image URL is required.", "error");
+      return;
+    }
+    const body = cleanObject({
+      productId,
+      name,
+      price,
+      labelledPrice,
+      stock,
+      brand: String(formData.get("brand") || "").trim() || undefined,
+      model: String(formData.get("model") || "").trim() || undefined,
+      category: String(formData.get("category") || "").trim() || undefined,
+      description: String(formData.get("description") || "").trim() || undefined,
+      altNames: toArray(String(formData.get("altNames") || "")),
+      images: images
+    });
+
+    try {
+      if (saveProductBtn) {
+        saveProductBtn.disabled = true;
+      }
+      setActionStatus("Saving product...", "");
+
+      if (editingProductId) {
+        await sendProductRequest(`${API_BASE_URL}/products/${encodeURIComponent(editingProductId)}`, "PUT", body);
+        alert("Product updated successfully.");
+        setActionStatus("Product updated successfully.", "success");
+        closeAddProductForm();
+      } else {
+        await sendProductRequest(`${API_BASE_URL}/products`, "POST", body);
+        alert("Product created successfully.");
+        setActionStatus("Product saved successfully and displayed in the table.", "success");
+        closeAddProductForm();
+      }
+
+      resetCreateFormToAddMode();
+      await fetchProducts();
+    } catch (error) {
+      setActionStatus(error.message, "error");
+    } finally {
+      if (saveProductBtn) {
+        saveProductBtn.disabled = false;
+      }
+    }
   });
 
-  try {
-    if (saveProductBtn) {
-      saveProductBtn.disabled = true;
-    }
-    setActionStatus("Saving product...", "");
+  refreshBtn?.addEventListener("click", fetchProducts);
 
-    if (editingProductId) {
-      await sendProductRequest(`${API_BASE_URL}/products/${encodeURIComponent(editingProductId)}`, "PUT", body);
-      alert("Product updated successfully.");
-      setActionStatus("Product updated successfully.", "success");
-      closeAddProductForm();
-    } else {
-      await sendProductRequest(`${API_BASE_URL}/products`, "POST", body);
-      alert("Product created successfully.");
-      setActionStatus("Product saved successfully and displayed in the table.", "success");
-      closeAddProductForm();
-    }
-
+  openAddProductBtn?.addEventListener("click", openAddProductForm);
+  closeAddProductBtn?.addEventListener("click", closeAddProductForm);
+  cancelEditBtn?.addEventListener("click", () => {
     resetCreateFormToAddMode();
-    await fetchProducts();
-  } catch (error) {
-    setActionStatus(error.message, "error");
-  } finally {
-    if (saveProductBtn) {
-      saveProductBtn.disabled = false;
-    }
-  }
-});
-
-refreshBtn?.addEventListener("click", fetchProducts);
-
-openAddProductBtn?.addEventListener("click", openAddProductForm);
-closeAddProductBtn?.addEventListener("click", closeAddProductForm);
-cancelEditBtn?.addEventListener("click", () => {
-  resetCreateFormToAddMode();
-  closeAddProductForm();
-});
+    closeAddProductForm();
+  });
   logoutBtn?.addEventListener("click", () => {
     localStorage.removeItem("token");
     window.location.href = "login.html";

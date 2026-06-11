@@ -83,23 +83,23 @@ form.addEventListener("submit", async (event) => {
     submitBtn.disabled = true;
     await new Promise(r => setTimeout(r, 8000));
     try {
-        const retry = await fetch(`${API_BASE_URL}/users/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-        });
-        const retryData = await retry.json();
-        if (retry.ok && retryData.token) {
-            handleLoginSuccess(retryData.token);
-            return;
-        }
-        setStatus(retryData.message || "Login failed.", "error");
+      const retry = await fetch(`${API_BASE_URL}/users/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const retryData = await retry.json();
+      if (retry.ok && retryData.token) {
+        handleLoginSuccess(retryData.token);
+        return;
+      }
+      setStatus(retryData.message || "Login failed.", "error");
     } catch (e) {
-        setStatus("Server is still waking up. Please try again in 30 seconds.", "error");
+      setStatus("Server is still waking up. Please try again in 30 seconds.", "error");
     } finally {
-        submitBtn.disabled = false;
+      submitBtn.disabled = false;
     }
-}
+  }
 
 });
 

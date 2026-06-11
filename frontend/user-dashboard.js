@@ -128,25 +128,25 @@ function renderCompactPagination(current, totalPages) {
   const paginationEl = document.getElementById('pagination');
   if (!paginationEl) return;
   const pages = [];
-  pages.push(`<button class="page-btn" data-action="prev" ${current===1? 'disabled' : ''}>Previous</button>`);
+  pages.push(`<button class="page-btn" data-action="prev" ${current === 1 ? 'disabled' : ''}>Previous</button>`);
 
   const delta = 2;
   const range = [];
   for (let i = Math.max(1, current - delta); i <= Math.min(totalPages, current + delta); i++) range.push(i);
 
   if (range[0] > 1) {
-    pages.push(`<button class="page-btn ${1===current? 'active' : ''}" data-page="1">1</button>`);
+    pages.push(`<button class="page-btn ${1 === current ? 'active' : ''}" data-page="1">1</button>`);
     if (range[0] > 2) pages.push(`<span class="ellipsis">&hellip;</span>`);
   }
 
-  range.forEach(i => pages.push(`<button class="page-btn ${i===current? 'active' : ''}" data-page="${i}">${i}</button>`));
+  range.forEach(i => pages.push(`<button class="page-btn ${i === current ? 'active' : ''}" data-page="${i}">${i}</button>`));
 
-  if (range[range.length-1] < totalPages) {
-    if (range[range.length-1] < totalPages - 1) pages.push(`<span class="ellipsis">&hellip;</span>`);
-    pages.push(`<button class="page-btn ${totalPages===current? 'active' : ''}" data-page="${totalPages}">${totalPages}</button>`);
+  if (range[range.length - 1] < totalPages) {
+    if (range[range.length - 1] < totalPages - 1) pages.push(`<span class="ellipsis">&hellip;</span>`);
+    pages.push(`<button class="page-btn ${totalPages === current ? 'active' : ''}" data-page="${totalPages}">${totalPages}</button>`);
   }
 
-  pages.push(`<button class="page-btn" data-action="next" ${current===totalPages? 'disabled' : ''}>Next</button>`);
+  pages.push(`<button class="page-btn" data-action="next" ${current === totalPages ? 'disabled' : ''}>Next</button>`);
   paginationEl.innerHTML = pages.join('');
 }
 

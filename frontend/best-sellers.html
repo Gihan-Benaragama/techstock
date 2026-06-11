@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Best Sellers – Tech Stock</title>
   <link rel="stylesheet" href="./styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <style>
     :root {
       --primary: #e60044;
@@ -20,37 +23,229 @@
       --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    body {font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; background:#f8fafc; color:var(--text-main); margin:0; padding-top:60px; overflow-x:hidden;}
-    .hero-section {background:radial-gradient(circle at 80% 20%, rgba(99,102,241,0.18) 0%, rgba(2,6,23,1) 100%), #020617; padding:60px 8vw; color:#fff; min-height:380px; display:flex; align-items:center;}
-    .hero-content {max-width:1200px; margin:auto; display:grid; grid-template-columns:1.2fr 0.8fr; gap:30px;}
-    .hero-title {font-size:clamp(2rem,4vw,3rem); font-weight:800; margin:0 0 12px;}
-    .hero-tag {background:linear-gradient(135deg, rgba(6,182,212,0.15), rgba(99,102,241,0.15)); color:#22d3ee; padding:6px 12px; border-radius:12px; font-weight:600; margin-bottom:16px; display:inline-block;}
-    .hero-img {max-width:100%; max-height:280px; object-fit:contain;}
-    .best-products-wrap {max-width:1200px; margin:auto; padding:40px 24px;}
-    .section-header {display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;}
-    .section-header h2 {font-size:1.6rem; font-weight:800; margin:0;}
-    #best-products {display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:24px;}
-    .product-card {background:var(--card-bg); border-radius:16px; border:1px solid rgba(226,232,240,0.8); overflow:hidden; transition:var(--transition); box-shadow:var(--shadow-sm); display:flex; flex-direction:column;}
-    .product-card:hover {transform:translateY(-6px); box-shadow:var(--shadow-lg);}
-    .product-image-container {height:220px; display:flex; justify-content:center; align-items:center; background:#f8fafc; cursor:pointer;}
-    .product-image-container img {width:100%; height:100%; object-fit:contain; padding:16px;}
-    .product-info {padding:20px; display:flex; flex-direction:column; flex-grow:1;}
-    .brand-label {font-size:0.75rem; text-transform:uppercase; color:#64748b; margin-bottom:6px;}
-    .product-name {font-size:1.05rem; font-weight:700; margin:0 0 8px; overflow:hidden; -webkit-line-clamp:2; -webkit-box-orient:vertical; display:-webkit-box;}
-    .price-wrap {display:flex; align-items:center; gap:10px; margin-top:auto;}
-    .product-price {font-size:1.25rem; font-weight:800; color:#10b981;}
-    .original-price {font-size:0.9rem; color:#64748b; text-decoration:line-through;}
-    .quick-add {background:#0f172a; color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; margin-top:12px; transition:var(--transition);}
-    .quick-add:hover {background:var(--primary);}
-    .toast-container {position:fixed; bottom:24px; right:24px; z-index:10002; display:flex; flex-direction:column; gap:10px; pointer-events:none;}
-    .toast {background:#0f172a; color:#fff; padding:14px 20px; border-left:4px solid #10b981; border-radius:12px; box-shadow:var(--shadow-lg); display:flex; align-items:center; gap:12px; font-weight:600; animation:slideIn .35s forwards;}
-    @keyframes slideIn{to{transform:translateX(0);}}
-    .toast.fade-out{animation:fadeOut .3s forwards;}
-    @keyframes fadeOut{to{transform:translateY(12px);opacity:0;}}
-    @media(max-width:900px){.hero-content{grid-template-columns:1fr;}}
-    @media(max-width:640px){#best-products{grid-template-columns:repeat(2,1fr);}}
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      background: #f8fafc;
+      color: var(--text-main);
+      margin: 0;
+      padding-top: 60px;
+      overflow-x: hidden;
+    }
+
+    .hero-section {
+      background: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.18) 0%, rgba(2, 6, 23, 1) 100%), #020617;
+      padding: 60px 8vw;
+      color: #fff;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-content {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 30px;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      margin: 0 0 12px;
+    }
+
+    .hero-tag {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(99, 102, 241, 0.15));
+      color: #22d3ee;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+
+    .hero-img {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+    }
+
+    .best-products-wrap {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 24px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 12px;
+    }
+
+    .section-header h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    #best-products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      overflow: hidden;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-image-container {
+      height: 220px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f8fafc;
+      cursor: pointer;
+    }
+
+    .product-image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 16px;
+    }
+
+    .product-info {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .brand-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 6px;
+    }
+
+    .product-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 8px;
+      overflow: hidden;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+    }
+
+    .price-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .product-price {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #10b981;
+    }
+
+    .original-price {
+      font-size: 0.9rem;
+      color: #64748b;
+      text-decoration: line-through;
+    }
+
+    .quick-add {
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: var(--transition);
+    }
+
+    .quick-add:hover {
+      background: var(--primary);
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 10002;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: #0f172a;
+      color: #fff;
+      padding: 14px 20px;
+      border-left: 4px solid #10b981;
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      animation: slideIn .35s forwards;
+    }
+
+    @keyframes slideIn {
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .toast.fade-out {
+      animation: fadeOut .3s forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        transform: translateY(12px);
+        opacity: 0;
+      }
+    }
+
+    @media(max-width:900px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width:640px) {
+      #best-products {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   </style>
 </head>
+
 <body>
   <!-- HEADER (reuse existing) -->
   <header class="dashboard-header">
@@ -66,11 +261,15 @@
       <a href="about.html">About</a>
     </nav>
     <div class="dashboard-actions">
-      <div class="search-container desktop-only"><input type="text" id="searchInput" placeholder="Search" class="dashboard-search" /></div>
-      <button id="cartBtn" class="dashboard-cart" title="View Cart"><span class="cart-icon">🛒</span><span id="cartCount" class="cart-count">0</span></button>
+      <div class="search-container desktop-only"><input type="text" id="searchInput" placeholder="Search"
+          class="dashboard-search" /></div>
+      <button id="cartBtn" class="dashboard-cart" title="View Cart"><span class="cart-icon">🛒</span><span
+          id="cartCount" class="cart-count">0</span></button>
       <a id="headerLoginBtn" href="login.html" class="header-login-btn desktop-only" style="display:none;">Login</a>
       <div id="profileMenuContainer" class="profile-menu-container desktop-only" style="display:none;">
-        <button id="profileBtn" class="profile-btn" aria-label="User profile"><img id="profileAvatar" src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23cbd5e1\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>" alt="Avatar" class="profile-avatar" /></button>
+        <button id="profileBtn" class="profile-btn" aria-label="User profile"><img id="profileAvatar"
+            src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23cbd5e1\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+            alt="Avatar" class="profile-avatar" /></button>
         <div id="profileDropdown" class="profile-dropdown" style="display:none;"></div>
       </div>
     </div>
@@ -132,7 +331,7 @@
       toast.className = 'toast';
       toast.innerHTML = `<span style="color:#10b981; font-weight:bold;">✓</span> <span>Added <strong>${name}</strong> to cart!</span>`;
       container.appendChild(toast);
-      setTimeout(() => {toast.classList.add('fade-out'); toast.addEventListener('animationend', () => toast.remove());}, 2500);
+      setTimeout(() => { toast.classList.add('fade-out'); toast.addEventListener('animationend', () => toast.remove()); }, 2500);
     };
 
     const createCard = (product) => {
@@ -165,20 +364,20 @@
     const renderBestSellers = (products) => {
       const container = document.getElementById('best-products');
       container.innerHTML = '';
-      const sorted = [...products].sort((a,b)=> (b.price||0)-(a.price||0));
+      const sorted = [...products].sort((a, b) => (b.price || 0) - (a.price || 0));
       sorted.forEach(p => container.appendChild(createCard(p)));
       const label = document.getElementById('best-count-label');
-      if (label) label.textContent = `Showing ${sorted.length} product${sorted.length!==1?'s':''}`;
+      if (label) label.textContent = `Showing ${sorted.length} product${sorted.length !== 1 ? 's' : ''}`;
     };
 
     fetch(API_URL)
-      .then(r=>r.json())
-      .then(data=>{
+      .then(r => r.json())
+      .then(data => {
         const items = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
         document.getElementById('best-products').classList.remove('products-loader');
         renderBestSellers(items);
       })
-      .catch(err=>{
+      .catch(err => {
         console.error('Failed to load best sellers', err);
         const container = document.getElementById('best-products');
         container.innerHTML = `<div style="text-align:center; padding:40px; color:#64748b;">Unable to load best sellers.</div>`;
@@ -187,4 +386,5 @@
   <script src="./header.js"></script>
   <script src="./nav-active.js"></script>
 </body>
+
 </html>
