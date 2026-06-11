@@ -5,28 +5,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Best Sellers – Tech Stock</title>
   <link rel="stylesheet" href="./styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* Additional page‑specific tweaks */
-    .hero-text h1 {
-      font-size: 3rem;
-      font-weight: 800;
-      letter-spacing: -1px;
+    :root {
+      --primary: #e60044;
+      --secondary: #06b6d4;
+      --dark-bg: #020617;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --glass-bg: rgba(255, 255, 255, 0.82);
+      --glass-border: rgba(226, 232, 240, 0.6);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .hero-text p {
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    @media (max-width: 768px) {
-      .hero-text h1 { font-size: 2.2rem; }
-    }
+    body {font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; background:#f8fafc; color:var(--text-main); margin:0; padding-top:60px; overflow-x:hidden;}
+    .hero-section {background:radial-gradient(circle at 80% 20%, rgba(99,102,241,0.18) 0%, rgba(2,6,23,1) 100%), #020617; padding:60px 8vw; color:#fff; min-height:380px; display:flex; align-items:center;}
+    .hero-content {max-width:1200px; margin:auto; display:grid; grid-template-columns:1.2fr 0.8fr; gap:30px;}
+    .hero-title {font-size:clamp(2rem,4vw,3rem); font-weight:800; margin:0 0 12px;}
+    .hero-tag {background:linear-gradient(135deg, rgba(6,182,212,0.15), rgba(99,102,241,0.15)); color:#22d3ee; padding:6px 12px; border-radius:12px; font-weight:600; margin-bottom:16px; display:inline-block;}
+    .hero-img {max-width:100%; max-height:280px; object-fit:contain;}
+    .best-products-wrap {max-width:1200px; margin:auto; padding:40px 24px;}
+    .section-header {display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid #e2e8f0; padding-bottom:12px;}
+    .section-header h2 {font-size:1.6rem; font-weight:800; margin:0;}
+    #best-products {display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:24px;}
+    .product-card {background:var(--card-bg); border-radius:16px; border:1px solid rgba(226,232,240,0.8); overflow:hidden; transition:var(--transition); box-shadow:var(--shadow-sm); display:flex; flex-direction:column;}
+    .product-card:hover {transform:translateY(-6px); box-shadow:var(--shadow-lg);}
+    .product-image-container {height:220px; display:flex; justify-content:center; align-items:center; background:#f8fafc; cursor:pointer;}
+    .product-image-container img {width:100%; height:100%; object-fit:contain; padding:16px;}
+    .product-info {padding:20px; display:flex; flex-direction:column; flex-grow:1;}
+    .brand-label {font-size:0.75rem; text-transform:uppercase; color:#64748b; margin-bottom:6px;}
+    .product-name {font-size:1.05rem; font-weight:700; margin:0 0 8px; overflow:hidden; -webkit-line-clamp:2; -webkit-box-orient:vertical; display:-webkit-box;}
+    .price-wrap {display:flex; align-items:center; gap:10px; margin-top:auto;}
+    .product-price {font-size:1.25rem; font-weight:800; color:#10b981;}
+    .original-price {font-size:0.9rem; color:#64748b; text-decoration:line-through;}
+    .quick-add {background:#0f172a; color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; margin-top:12px; transition:var(--transition);}
+    .quick-add:hover {background:var(--primary);}
+    .toast-container {position:fixed; bottom:24px; right:24px; z-index:10002; display:flex; flex-direction:column; gap:10px; pointer-events:none;}
+    .toast {background:#0f172a; color:#fff; padding:14px 20px; border-left:4px solid #10b981; border-radius:12px; box-shadow:var(--shadow-lg); display:flex; align-items:center; gap:12px; font-weight:600; animation:slideIn .35s forwards;}
+    @keyframes slideIn{to{transform:translateX(0);}}
+    .toast.fade-out{animation:fadeOut .3s forwards;}
+    @keyframes fadeOut{to{transform:translateY(12px);opacity:0;}}
+    @media(max-width:900px){.hero-content{grid-template-columns:1fr;}}
+    @media(max-width:640px){#best-products{grid-template-columns:repeat(2,1fr);}}
   </style>
 </head>
 <body>
-  <!-- HEADER (fixed) -->
+  <!-- HEADER (reuse existing) -->
   <header class="dashboard-header">
     <div style="display:flex; align-items:center; gap:10px;">
       <button id="mobileMenuBtn" class="hamburger-btn mobile-only">☰</button>
-      <img src="./images/download.png" alt="Logo" class="dashboard-logo" style="cursor:pointer;" onclick="window.location.href='index.html'" />
+      <img src="./images/download.png" alt="Logo" class="dashboard-logo" onclick="window.location.href='index.html'" />
     </div>
     <nav class="dashboard-nav desktop-only">
       <a href="index.html">Home</a>
@@ -36,152 +66,124 @@
       <a href="about.html">About</a>
     </nav>
     <div class="dashboard-actions">
-      <div class="search-container desktop-only">
-        <input type="text" id="searchInput" placeholder="Search" class="dashboard-search" />
-        <div id="searchResults" class="search-results-dropdown" style="display: none;"></div>
-      </div>
-      <button id="cartBtn" class="dashboard-cart" title="View Cart">
-        <span class="cart-icon">🛒</span>
-        <span id="cartCount" class="cart-count">0</span>
-      </button>
-      <!-- Login button shown when NOT logged in -->
+      <div class="search-container desktop-only"><input type="text" id="searchInput" placeholder="Search" class="dashboard-search" /></div>
+      <button id="cartBtn" class="dashboard-cart" title="View Cart"><span class="cart-icon">🛒</span><span id="cartCount" class="cart-count">0</span></button>
       <a id="headerLoginBtn" href="login.html" class="header-login-btn desktop-only" style="display:none;">Login</a>
-      <!-- Profile menu shown when logged in -->
       <div id="profileMenuContainer" class="profile-menu-container desktop-only" style="display:none;">
-        <button id="profileBtn" class="profile-btn" aria-label="User profile">
-          <img id="profileAvatar"
-            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
-            alt="Avatar" class="profile-avatar" />
-        </button>
-        <div id="profileDropdown" class="profile-dropdown" style="display: none;">
-          <div class="profile-dropdown-header">
-            <img id="dropdownAvatar"
-              src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
-              alt="Avatar" class="dropdown-avatar" />
-            <div class="profile-info">
-              <h4 id="profileName">User Name</h4>
-              <p id="profileEmail">user@example.com</p>
-            </div>
-          </div>
-          <div class="profile-dropdown-divider"></div>
-          <button id="profileLogoutBtn" class="profile-logout-btn">
-            <span class="logout-icon">🚪</span> Log Out
-          </button>
-        </div>
+        <button id="profileBtn" class="profile-btn" aria-label="User profile"><img id="profileAvatar" src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23cbd5e1\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>" alt="Avatar" class="profile-avatar" /></button>
+        <div id="profileDropdown" class="profile-dropdown" style="display:none;"></div>
       </div>
     </div>
   </header>
 
-  <!-- Mobile Drawer -->
-  <div id="mobileDrawer" class="mobile-drawer">
-    <div class="mobile-drawer-header">
-      <div class="dashboard-title">Menu</div>
-      <button id="closeMobileDrawerBtn" class="mobile-drawer-close">&times;</button>
-    </div>
-    <div class="mobile-search-container" style="position: relative; margin: 10px 20px;">
-      <input type="text" id="mobileSearchInput" placeholder="Search products..." class="mobile-drawer-search" style="width: 100%; box-sizing: border-box;" />
-      <div id="mobileSearchResults" class="search-results-dropdown" style="display: none; position: absolute; left: 0; right: 0; width: auto; max-height: 250px;"></div>
-    </div>
-    <div class="mobile-profile-section">
-      <img id="mobileAvatar"
-        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
-        alt="Avatar" class="mobile-avatar" />
-      <div class="mobile-profile-info">
-        <h4 id="mobileName">User Name</h4>
-        <p id="mobileEmail">user@example.com</p>
-      </div>
-    </div>
-    <nav class="mobile-drawer-nav">
-      <a href="index.html">Home</a>
-      <a href="user-dashboard.html">Shop All</a>
-      <a href="new-arrivals.html">New Arrivals</a>
-      <a href="best-sellers.html">Best Sellers</a>
-      <a href="about.html">About</a>
-      <a href="login.html" id="mobileLoginBtn" style="color: #38bdf8; display:none;">Login</a>
-      <a href="#" id="mobileLogoutBtn" style="color: #e60044; display:none;">Log Out</a>
-    </nav>
-  </div>
-
-  <!-- Cart Sidebar -->
-  <div id="cartSidebar" class="cart-sidebar">
-    <div class="cart-sidebar-content">
-      <div class="cart-sidebar-header">
-        <span class="cart-title">Cart <span id="cartItemCount">(0 item)</span></span>
-        <span id="closeCartSidebar" class="close-cart-sidebar">&times;</span>
-      </div>
-      <hr />
-      <div id="cartItems"></div>
-      <div id="cartPromo" class="cart-promo">
-        <input type="text" id="promoInput" placeholder="Enter a promo code" />
-      </div>
-      <hr />
-      <div class="cart-estimate">
-        <div class="cart-estimate-label">Estimated total</div>
-        <div id="cartTotal" class="cart-estimate-value"></div>
-      </div>
-      <div class="cart-estimate-note">Taxes and shipping are calculated at checkout.</div>
-      <button class="cart-checkout-btn">Checkout</button>
-      <button class="cart-view-btn">View Cart</button>
-      <div class="cart-secure"><span class="cart-lock">&#128274;</span> Secure Checkout</div>
-    </div>
-  </div>
-
   <!-- HERO SECTION -->
-  <section class="about-hero" style="background: radial-gradient(circle at right, #1a1a2e, #0b0d1a);">
-    <div class="hero-text">
-      <h1>Best Sellers</h1>
-      <div class="divider"></div>
-      <p>Explore the most popular premium gadgets that tech lovers can’t stop talking about. Hand‑picked, top‑rated, and trusted worldwide.</p>
+  <section class="hero-section" id="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <span class="hero-tag">🏆 BEST SELLERS</span>
+        <h1 class="hero-title">Our Most Popular Tech</h1>
+        <p>Hand‑picked top‑selling gadgets that our customers love. Grab them while stock lasts!</p>
+      </div>
+      <div class="hero-visual">
+        <img src="./images/download.png" alt="Best Sellers" class="hero-img" />
+      </div>
     </div>
   </section>
 
-  <!-- PRODUCT GRID (dynamic) -->
-  <section class="product-grid" style="padding: 2rem 8%;">
-    <div id="best-sellers"></div>
+  <!-- PRODUCTS GRID -->
+  <section class="best-products-wrap">
+    <div class="section-header">
+      <h2>Best Sellers</h2>
+      <p id="best-count-label">Loading...</p>
+    </div>
+    <div id="best-products" class="products-loader">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
   </section>
 
-  <!-- SCRIPT: fetch best‑selling products -->
+  <!-- TOASTS -->
+  <div id="toast-container" class="toast-container"></div>
+
   <script>
-    // Use the generic products endpoint
-    const API_URL = `${window.location.protocol}//${window.location.hostname}:5001/products`;
+    // Resolve API base (same logic as other pages)
+    let API_BASE = "https://techstock-kxtz.onrender.com";
+    if (window.location) {
+      const hn = window.location.hostname;
+      const isLocal = hn === 'localhost' || hn === '127.0.0.1' || /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hn) || hn.endsWith('.local') || !hn || window.location.protocol === 'file:';
+      if (isLocal) {
+        const host = (window.location.protocol === 'file:' || !hn) ? 'localhost' : hn;
+        API_BASE = `http://${host}:5001`;
+      }
+    }
+    const API_URL = `${API_BASE}/products`;
+
+    const resolveImageUrl = (product) => {
+      const img = (product.images && product.images.length > 0) ? product.images[0] : null;
+      if (typeof img === 'string' && img.trim() !== '') return img.trim();
+      return './images/product-placeholder.png';
+    };
+
+    const showToast = (name) => {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<span style="color:#10b981; font-weight:bold;">✓</span> <span>Added <strong>${name}</strong> to cart!</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {toast.classList.add('fade-out'); toast.addEventListener('animationend', () => toast.remove());}, 2500);
+    };
 
     const createCard = (product) => {
       const card = document.createElement('div');
       card.className = 'product-card';
-      let img = (product.images && product.images.length > 0) ? product.images[0] : (product.image || product.imageUrl || './images/product-placeholder.png');
-      if (typeof img === 'string' && !/^https?:\/\//i.test(img) && !img.startsWith('/')) img = `./${img}`;
-      const priceText = (typeof product.price === 'number') ? `Rs. ${product.price.toLocaleString()}` : 'Rs. --';
+      const img = resolveImageUrl(product);
+      const detailUrl = `product-detail.html?id=${encodeURIComponent(product.productId || product._id)}`;
+      const price = typeof product.price === 'number' ? `Rs. ${product.price.toLocaleString()}` : 'Rs. --';
+      let original = '';
+      if (product.labelledPrice && product.labelledPrice > product.price) {
+        original = `<span class="original-price">Rs. ${product.labelledPrice.toLocaleString()}</span>`;
+      }
       card.innerHTML = `
-        <div class="product-image-container" onclick="window.location.href='product-detail.html?id=${encodeURIComponent(product.productId || product._id)}'" style="cursor:pointer; width: 100%;">
-          <img src="${img}" alt="${product.name || 'Product'}" />
+        <div class="product-image-container" onclick="window.location.href='${detailUrl}'">
+          <img src="${img}" alt="${product.name || 'Product'}" loading="lazy" onerror="this.onerror=null;this.src='./images/product-placeholder.png';" />
         </div>
-        <div class="product-name" onclick="window.location.href='product-detail.html?id=${encodeURIComponent(product.productId || product._id)}'" style="cursor:pointer;">${product.name || ''}</div>
-        <div class="product-price">${priceText}</div>
+        <div class="product-info">
+          <span class="brand-label">${product.brand || 'Premium Tech'}</span>
+          <div class="product-name" onclick="window.location.href='${detailUrl}'">${product.name || ''}</div>
+          <div class="price-wrap">
+            <span class="product-price">${price}</span>
+            ${original}
+          </div>
+          <button class="quick-add" onclick="event.stopPropagation();window.addToCart && window.addToCart({id: '${product.productId || product._id}', name:'${product.name}', price:${product.price}, image:'${img}'});showToast('${product.name}');">🛒 Quick Add</button>
+        </div>
       `;
       return card;
     };
 
-    // Fetch, then sort by a hypothetical "sales" field (fallback to price) and display top-4.
+    const renderBestSellers = (products) => {
+      const container = document.getElementById('best-products');
+      container.innerHTML = '';
+      const sorted = [...products].sort((a,b)=> (b.price||0)-(a.price||0));
+      sorted.forEach(p => container.appendChild(createCard(p)));
+      const label = document.getElementById('best-count-label');
+      if (label) label.textContent = `Showing ${sorted.length} product${sorted.length!==1?'s':''}`;
+    };
+
     fetch(API_URL)
-      .then((res) => res.json())
-      .then((payload) => {
-        const products = Array.isArray(payload) ? payload : (Array.isArray(payload?.products) ? payload.products : []);
-        const sorted = products.sort((a, b) => {
-          const aVal = a.sales ?? a.price ?? 0;
-          const bVal = b.sales ?? b.price ?? 0;
-          return bVal - aVal;
-        });
-        const topFour = sorted.slice(0, 4);
-        const container = document.getElementById('best-sellers');
-        topFour.forEach((p) => container.appendChild(createCard(p)));
+      .then(r=>r.json())
+      .then(data=>{
+        const items = Array.isArray(data) ? data : (Array.isArray(data.products) ? data.products : []);
+        document.getElementById('best-products').classList.remove('products-loader');
+        renderBestSellers(items);
       })
-      .catch((err) => {
-        console.error('Failed to load best sellers:', err);
-        const container = document.getElementById('best-sellers');
-        container.innerHTML = '<p style="color:#f87171;">Unable to load best-selling products.</p>';
+      .catch(err=>{
+        console.error('Failed to load best sellers', err);
+        const container = document.getElementById('best-products');
+        container.innerHTML = `<div style="text-align:center; padding:40px; color:#64748b;">Unable to load best sellers.</div>`;
       });
   </script>
-
   <script src="./header.js"></script>
   <script src="./nav-active.js"></script>
 </body>

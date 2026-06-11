@@ -1,162 +1,636 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>New Arrivals – Tech Stock</title>
   <link rel="stylesheet" href="./styles.css" />
+  <!-- Import Premium Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
-    .arrivals-hero {
+    :root {
+      --primary: #e60044;
+      --primary-hover: #b80036;
+      --secondary: #06b6d4;
+      --secondary-hover: #0891b2;
+      --dark-bg: #020617;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --glass-bg: rgba(255, 255, 255, 0.82);
+      --glass-border: rgba(226, 232, 240, 0.6);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      background: #f8fafc;
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      margin: 0;
+      padding-top: 60px;
+      overflow-x: hidden;
+    }
+
+    /* Showcase Hero styling */
+    .arrivals-hero-showcase {
       position: relative;
-      min-height: 430px;
-      margin-top: 0;
-      background-image:
-        linear-gradient(90deg, rgba(2, 6, 23, 0.88) 0%, rgba(2, 6, 23, 0.56) 42%, rgba(2, 6, 23, 0.15) 100%),
-        url('./images/image.png');
-      background-size: cover;
-      background-position: center;
+      background: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.18) 0%, rgba(2, 6, 23, 1) 100%), #020617;
+      padding: 60px 8vw;
+      color: #fff;
+      overflow: hidden;
+      min-height: 460px;
       display: flex;
       align-items: center;
-      padding: 32px 7vw;
-      color: #fff;
+      transition: background 0.5s ease;
     }
 
-    .arrivals-hero-content {
-      max-width: 540px;
+    /* Grid overlay for tech appearance */
+    .arrivals-hero-showcase::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 30px 30px;
+      pointer-events: none;
     }
 
-    .arrivals-hero h1 {
-      margin: 0 0 6px;
-      font-size: clamp(2.3rem, 5vw, 3.8rem);
-      line-height: 0.98;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+    .hero-showcase-content {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 40px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      align-items: center;
+      z-index: 2;
     }
 
-    .arrivals-hero h2 {
-      margin: 0;
-      font-size: clamp(1.25rem, 2.5vw, 2rem);
+    .hero-showcase-details {
+      max-width: 650px;
+      text-align: left;
+    }
+
+    .spotlight-tag {
+      display: inline-flex;
+      align-items: center;
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(99, 102, 241, 0.15));
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: #22d3ee;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
+    }
+
+    .hero-showcase-details h1 {
+      font-size: clamp(2rem, 4.2vw, 3rem);
       font-weight: 800;
       line-height: 1.15;
+      margin: 0 0 16px;
+      background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
     }
 
-    .arrivals-hero p {
-      margin: 10px 0 12px;
+    .hero-showcase-details p {
       font-size: 1.1rem;
-      line-height: 1.35;
-      max-width: 460px;
-      color: rgba(255, 255, 255, 0.92);
+      line-height: 1.6;
+      color: #94a3b8;
+      margin: 0 0 24px;
     }
 
-    .arrivals-cta {
-      border: 0;
-      background: #fff;
-      color: #111827;
-      padding: 10px 18px;
-      border-radius: 7px;
+    .hero-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .hero-price {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #10b981;
+    }
+
+    .hero-original-price {
+      font-size: 1.25rem;
+      color: #64748b;
+      text-decoration: line-through;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .hero-cta-btn {
+      background: linear-gradient(135deg, var(--primary), #f43f5e);
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
       font-weight: 700;
+      border-radius: 12px;
       cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 20px rgba(230, 0, 68, 0.4);
     }
 
+    .hero-cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(230, 0, 68, 0.6);
+      background: linear-gradient(135deg, var(--primary-hover), #e11d48);
+    }
+
+    .hero-secondary-btn {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      padding: 13px 26px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: var(--transition);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .hero-secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .hero-showcase-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .visual-glow {
+      position: absolute;
+      width: 130%;
+      height: 130%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(6, 182, 212, 0) 70%);
+      filter: blur(45px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .floating-visual {
+      max-width: 100%;
+      max-height: 330px;
+      object-fit: contain;
+      z-index: 2;
+      animation: float 6s ease-in-out infinite;
+      filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.45));
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(1.2deg); }
+    }
+
+    /* Filters Bar styling */
+    .filter-sort-bar-wrap {
+      max-width: 1200px;
+      margin: -30px auto 40px;
+      padding: 0 24px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .filter-sort-bar {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 18px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .filter-label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .category-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover {
+      background: #f1f5f9;
+      color: var(--text-main);
+      border-color: #cbd5e1;
+    }
+
+    .filter-btn.active {
+      background: #0f172a;
+      color: #fff;
+      border-color: #0f172a;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    .sort-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sort-group label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sort-dropdown {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .sort-dropdown:focus {
+      border-color: #94a3b8;
+    }
+
+    /* Products Grid Section styling */
     .arrivals-products-wrap {
-      padding: 26px 22px 10px;
-      background: #f3f4f6;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 12px;
+    }
+
+    .section-header h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 0;
+      color: var(--text-main);
+    }
+
+    .section-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0;
     }
 
     #latest-products {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 16px;
-      max-width: 1240px;
-      margin: 0 auto;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
     }
 
+    /* Product Card premium custom design */
     #latest-products .product-card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 5px 16px rgba(2, 6, 23, 0.08);
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid rgba(226, 232, 240, 0.8);
       overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: stretch;
       padding: 0;
-      min-height: 255px;
-      transition: transform 180ms ease, box-shadow 180ms ease;
+      position: relative;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
     }
 
     #latest-products .product-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 9px 20px rgba(2, 6, 23, 0.12);
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(203, 213, 225, 0.8);
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, var(--primary), #f43f5e);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 10px rgba(230, 0, 68, 0.2);
+      z-index: 3;
     }
 
     #latest-products .product-image-container {
       width: 100%;
+      height: 220px;
       overflow: hidden;
+      background: #f8fafc;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
     }
 
     #latest-products .product-card img {
       width: 100%;
-      height: 140px;
-      object-fit: cover;
-      display: block;
-      margin: 0;
+      height: 100%;
+      object-fit: contain;
+      padding: 16px;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    #latest-products .product-name,
-    #latest-products .product-price {
+    #latest-products .product-card:hover img {
+      transform: scale(1.08);
+    }
+
+    .product-info-wrap {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
       text-align: left;
-      padding: 0 10px;
     }
 
     #latest-products .product-name {
-      margin: 10px 0 4px;
-      font-size: 0.95rem;
-      line-height: 1.25;
-      color: #0f172a;
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      line-height: 1.4;
+      color: var(--text-main);
       font-weight: 700;
       display: -webkit-box;
-      line-clamp: 2;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      min-height: 2.4em;
+      min-height: 2.8em;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    #latest-products .product-name:hover {
+      color: var(--primary);
+    }
+
+    .brand-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 800;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .price-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
     }
 
     #latest-products .product-price {
-      margin: 0 0 12px;
-      color: #0f9d58;
-      font-size: 1.05rem;
+      margin: 0;
+      color: #10b981;
+      font-size: 1.25rem;
       font-weight: 800;
     }
 
-    @media (max-width: 700px) {
-      .arrivals-hero {
-        min-height: 320px;
-        padding: 24px 5vw;
-      }
+    .original-price-strike {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
 
-      .arrivals-hero p {
-        font-size: 0.98rem;
-      }
+    .quick-add-btn {
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 16px;
+      transition: var(--transition);
+    }
 
+    .quick-add-btn:hover {
+      background: var(--primary);
+      box-shadow: 0 4px 12px rgba(230, 0, 68, 0.25);
+    }
+
+    /* Skeleton Loading screen components */
+    .products-loader {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .skeleton-card {
+      height: 380px;
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+      border-radius: 16px;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Toast container and components */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 10002;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: #0f172a;
+      color: #fff;
+      padding: 14px 20px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-left: 4px solid #10b981;
+      pointer-events: auto;
+      transform: translateX(120%);
+      animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideIn {
+      to { transform: translateX(0); }
+    }
+
+    .toast.fade-out {
+      animation: fadeOut 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeOut {
+      to { transform: translateY(12px); opacity: 0; }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .hero-showcase-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+      .hero-showcase-visual {
+        order: -1;
+      }
+      .floating-visual {
+        max-height: 250px;
+      }
+      .arrivals-hero-showcase {
+        padding: 40px 6vw;
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .filter-sort-bar-wrap {
+        margin-top: -15px;
+      }
+      .filter-sort-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filter-group, .sort-group {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+      }
+      .category-filters {
+        width: 100%;
+      }
+      .filter-btn {
+        flex-grow: 1;
+        text-align: center;
+      }
+      .sort-dropdown {
+        width: 100%;
+      }
       #latest-products {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+        gap: 12px;
       }
-
-      #latest-products .product-card img {
-        height: 130px;
+      #latest-products .product-card {
+        border-radius: 12px;
+      }
+      #latest-products .product-image-container {
+        height: 140px;
+      }
+      .product-info-wrap {
+        padding: 12px;
+      }
+      #latest-products .product-name {
+        font-size: 0.85rem;
+        min-height: 2.8em;
+      }
+      #latest-products .product-price {
+        font-size: 0.95rem;
+      }
+      .price-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+      }
+      .original-price-strike {
+        font-size: 0.75rem;
+        margin-left: 0;
+      }
+      .quick-add-btn {
+        margin-top: 10px;
+        font-size: 0.75rem;
+        padding: 8px 10px;
       }
     }
   </style>
 
 </head>
+
 <body>
   <!-- HEADER -->
   <header class="dashboard-header">
     <div style="display:flex; align-items:center; gap:10px;">
       <button id="mobileMenuBtn" class="hamburger-btn mobile-only">☰</button>
-      <img src="./images/download.png" alt="Logo" class="dashboard-logo" style="cursor:pointer;" onclick="window.location.href='index.html'" />
+      <img src="./images/download.png" alt="Logo" class="dashboard-logo" style="cursor:pointer;"
+        onclick="window.location.href='index.html'" />
     </div>
     <nav class="dashboard-nav desktop-only">
       <a href="index.html">Home</a>
@@ -209,8 +683,10 @@
       <button id="closeMobileDrawerBtn" class="mobile-drawer-close">&times;</button>
     </div>
     <div class="mobile-search-container" style="position: relative; margin: 10px 20px;">
-      <input type="text" id="mobileSearchInput" placeholder="Search products..." class="mobile-drawer-search" style="width: 100%; box-sizing: border-box;" />
-      <div id="mobileSearchResults" class="search-results-dropdown" style="display: none; position: absolute; left: 0; right: 0; width: auto; max-height: 250px;"></div>
+      <input type="text" id="mobileSearchInput" placeholder="Search products..." class="mobile-drawer-search"
+        style="width: 100%; box-sizing: border-box;" />
+      <div id="mobileSearchResults" class="search-results-dropdown"
+        style="display: none; position: absolute; left: 0; right: 0; width: auto; max-height: 250px;"></div>
     </div>
     <div class="mobile-profile-section">
       <img id="mobileAvatar"
@@ -256,64 +732,359 @@
     </div>
   </div>
 
-  <!-- HERO SECTION -->
-  <section class="arrivals-hero">
-    <div class="arrivals-hero-content">
-      <h1>New Arrivals</h1>
-      <h2>TechStock Vortex Pro Mechanical Gaming Keyboard</h2>
-      <p>Custom switches, dynamic RGB, and unmatched responsiveness.</p>
+  <!-- HERO SHOWCASE SECTION (Dynamic Spotlight) -->
+  <section class="arrivals-hero-showcase" id="hero-spotlight">
+    <div class="hero-showcase-content">
+      <div class="hero-showcase-details">
+        <span class="spotlight-tag">🚀 SPOTLIGHT RELEASE</span>
+        <h1 id="hero-title">Discover the Future</h1>
+        <p id="hero-description">Loading the latest innovation in premium high-performance tech hardware...</p>
+        <div class="hero-price-wrap">
+          <span id="hero-price" class="hero-price">Rs. --</span>
+          <span id="hero-original-price" class="hero-original-price"></span>
+        </div>
+        <div class="hero-actions">
+          <button id="hero-add-to-cart" class="hero-cta-btn">Add to Cart</button>
+          <a id="hero-view-details" href="#" class="hero-secondary-btn">View Details</a>
+        </div>
+      </div>
+      <div class="hero-showcase-visual">
+        <div class="visual-glow"></div>
+        <img id="hero-image" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='%231e293b'><rect width='100' height='100' rx='10'/></svg>" alt="Spotlight Product" class="floating-visual" />
+      </div>
     </div>
   </section>
 
-  <!-- PRODUCT GRID (dynamic) -->
+  <!-- FILTERS & CONTROLS BAR -->
+  <div class="filter-sort-bar-wrap">
+    <div class="filter-sort-bar">
+      <div class="filter-group">
+        <span class="filter-label">Filter:</span>
+        <div class="category-filters" id="category-filters">
+          <button class="filter-btn active" data-category="all">All Items</button>
+        </div>
+      </div>
+      <div class="sort-group">
+        <label for="sort-select">Sort:</label>
+        <select id="sort-select" class="sort-dropdown">
+          <option value="newest">Just Arrived</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS GRID -->
   <section class="arrivals-products-wrap">
-    <!-- JS will inject latest products here -->
+    <div class="section-header">
+      <h2>Latest Additions</h2>
+      <p id="product-count-label">Loading new arrivals...</p>
+    </div>
+    
+    <!-- Skeleton loader shown on fetch -->
+    <div id="products-loader" class="products-loader">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+
+    <!-- Product injection container -->
     <div id="latest-products"></div>
   </section>
 
-  <!-- SCRIPT: fetch latest two products -->
-  <script>
-    // Adjust the API URL to point to the backend (port 5001)
-    const API_URL = `${window.location.protocol}//${window.location.hostname}:5001/products`;
+  <!-- TOAST ALERT CONTAINER -->
+  <div id="toast-container" class="toast-container"></div>
 
-    // Helper to create a product card element.
+  <!-- SCRIPTS -->
+  <script>
+    // Resolve dynamic API URL (resolves locally to port 5001, otherwise uses production host)
+    let API_BASE = "https://techstock-kxtz.onrender.com";
+    if (window.location) {
+      const hn = window.location.hostname;
+      const isLocal = hn === 'localhost' || 
+                      hn === '127.0.0.1' || 
+                      /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hn) ||
+                      hn.endsWith('.local') ||
+                      !hn || 
+                      window.location.protocol === 'file:';
+      if (isLocal) {
+        const host = (window.location.protocol === 'file:' || !hn) ? 'localhost' : hn;
+        API_BASE = `http://${host}:5001`;
+      }
+    }
+    const API_URL = `${API_BASE}/products`;
+
+    let allProducts = [];
+    let currentCategory = 'all';
+
+    // Helper to get robust timestamp from createdAt or Mongo ObjectId
+    const getTimestamp = (item) => {
+      if (item.createdAt) return new Date(item.createdAt).getTime();
+      if (item._id && typeof item._id === 'string' && item._id.length === 24) {
+        return parseInt(item._id.substring(0, 8), 16) * 1000;
+      }
+      return 0;
+    };
+    let currentSort = 'newest';
+
+    // Helper to format images correctly
+    const resolveImageUrl = (product) => {
+      // Prefer first image in the images array; fallback to placeholder
+      const img = (product.images && product.images.length > 0) ? product.images[0] : null;
+      if (typeof img === 'string' && img.trim() !== '') {
+        return img.trim(); // return as‑is (absolute URL expected)
+      }
+      // Fallback placeholder image
+      return './images/product-placeholder.png';
+    };
+
+    // Helper to build single product card
     const createCard = (product) => {
       const card = document.createElement('div');
       card.className = 'product-card';
-      // Prefer images[0], then image or imageUrl
-      let img = (product.images && product.images.length > 0) ? product.images[0] : (product.image || product.imageUrl || './images/product-placeholder.png');
-      // If relative path (no protocol) make it relative
-      if (typeof img === 'string' && !/^https?:\/\//i.test(img) && !img.startsWith('/')) img = `./${img}`;
+      
+      const img = resolveImageUrl(product);
+      console.log('Resolved image URL for product', product.name, ':', img);
       const priceText = (typeof product.price === 'number') ? `Rs. ${product.price.toLocaleString()}` : 'Rs. --';
+      
+      let originalPriceHtml = '';
+      if (product.labelledPrice && product.labelledPrice > product.price) {
+        originalPriceHtml = `<span class="original-price-strike">Rs. ${product.labelledPrice.toLocaleString()}</span>`;
+      }
+      
+      const productIdStr = product.productId || product._id;
+      const detailUrl = `product-detail.html?id=${encodeURIComponent(productIdStr)}`;
+      
       card.innerHTML = `
-        <div class="product-image-container" onclick="window.location.href='product-detail.html?id=${encodeURIComponent(product.productId || product._id)}'" style="cursor:pointer;">
-          <img src="${img}" alt="${product.name || 'Product'}" />
+        <div class="card-badge">New</div>
+        <div class="product-image-container" onclick="window.location.href='${detailUrl}'">
+          <img src="${img}" alt="${product.name || 'Product'}" loading="lazy" onerror="this.onerror=null;this.src='./images/product-placeholder.png';" />
         </div>
-        <div class="product-name">${product.name || ''}</div>
-        <div class="product-price">${priceText}</div>
+        <div class="product-info-wrap">
+          <span class="brand-label">${product.brand || 'Premium Tech'}</span>
+          <div class="product-name" onclick="window.location.href='${detailUrl}'">${product.name || ''}</div>
+          <div class="price-container">
+            <span class="product-price">${priceText}</span>
+            ${originalPriceHtml}
+          </div>
+          <button class="quick-add-btn">
+            🛒 Quick Add
+          </button>
+        </div>
       `;
+      
+      // Bind quick add function
+      const quickAddBtn = card.querySelector('.quick-add-btn');
+      quickAddBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (window.addToCart) {
+          window.addToCart({
+            id: productIdStr,
+            name: product.name,
+            price: product.price,
+            image: img
+          });
+          showToast(product.name);
+        }
+      });
+      
       return card;
     };
 
-    // Fetch products, sort by newest, and render the latest set.
+    // Render Spotlight Hero
+    const renderHeroSpotlight = (products) => {
+      const heroSpotlight = document.getElementById('hero-spotlight');
+      if (products.length > 0) {
+        const newestProduct = products[0];
+        const img = resolveImageUrl(newestProduct);
+        
+        document.getElementById('hero-title').textContent = newestProduct.name || 'New Arrival Spotlight';
+        document.getElementById('hero-description').textContent = newestProduct.description || 'Experience the brand-new release from Tech Stock, designed with cutting-edge technology and premium quality.';
+        document.getElementById('hero-price').textContent = (typeof newestProduct.price === 'number') ? `Rs. ${newestProduct.price.toLocaleString()}` : 'Rs. --';
+        
+        const originalPriceEl = document.getElementById('hero-original-price');
+        if (newestProduct.labelledPrice && newestProduct.labelledPrice > newestProduct.price) {
+          originalPriceEl.textContent = `Rs. ${newestProduct.labelledPrice.toLocaleString()}`;
+        } else {
+          originalPriceEl.textContent = '';
+        }
+        
+        document.getElementById('hero-image').src = img;
+        document.getElementById('hero-image').alt = newestProduct.name || 'New Arrival';
+        
+        // Detail link
+        document.getElementById('hero-view-details').href = `product-detail.html?id=${encodeURIComponent(newestProduct.productId || newestProduct._id)}`;
+        
+        // Add to cart trigger
+        const heroAddBtn = document.getElementById('hero-add-to-cart');
+        heroAddBtn.onclick = (e) => {
+          e.preventDefault();
+          if (window.addToCart) {
+            window.addToCart({
+              id: newestProduct.productId || newestProduct._id,
+              name: newestProduct.name,
+              price: newestProduct.price,
+              image: img
+            });
+            showToast(newestProduct.name);
+          }
+        };
+      } else {
+        // Fallback banner
+        document.getElementById('hero-title').textContent = 'Next-Gen Gear Arrivals';
+        document.getElementById('hero-description').textContent = 'Our warehouse is constantly updating with premium tech hardware. Stay tuned for new releases!';
+        document.getElementById('hero-price').textContent = 'Tech Stock Store';
+        document.getElementById('hero-original-price').textContent = '';
+        document.getElementById('hero-image').src = './images/download.png';
+        document.getElementById('hero-add-to-cart').style.display = 'none';
+        document.getElementById('hero-view-details').href = 'user-dashboard.html';
+        document.getElementById('hero-view-details').textContent = 'Browse Store';
+      }
+    };
+
+    // Dynamically compile categories and render filter pills
+    const generateCategoryFilters = (products) => {
+      const filterContainer = document.getElementById('category-filters');
+      if (!filterContainer) return;
+      
+      const rawCategories = products.map(p => p.category).filter(Boolean);
+      const uniqueCategories = ['all', ...new Set(rawCategories)];
+      
+      filterContainer.innerHTML = '';
+      uniqueCategories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = `filter-btn ${cat === 'all' ? 'active' : ''}`;
+        btn.textContent = cat === 'all' ? 'All Items' : cat.charAt(0).toUpperCase() + cat.slice(1);
+        btn.dataset.category = cat;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentCategory = cat;
+          renderFilteredAndSortedProducts();
+        });
+        filterContainer.appendChild(btn);
+      });
+    };
+
+    // Filter, sort and render products grid
+    const renderFilteredAndSortedProducts = () => {
+      const container = document.getElementById('latest-products');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      // 1. Filter
+      let filtered = allProducts;
+      if (currentCategory !== 'all') {
+        filtered = allProducts.filter(p => p.category?.toLowerCase() === currentCategory.toLowerCase());
+      }
+      
+      // Update count label
+      const countLabel = document.getElementById('product-count-label');
+      if (countLabel) {
+        countLabel.textContent = `Showing ${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
+      }
+      
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+            <span style="font-size: 2.5rem;">🔍</span>
+            <h3 style="margin: 10px 0; color: #1e293b;">No products found</h3>
+            <p style="color: #64748b;">No products match the selected category in New Arrivals.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // 2. Sort
+      let sorted = [...filtered];
+      if (currentSort === 'newest') {
+        sorted.sort((a, b) => getTimestamp(b) - getTimestamp(a));
+      } else if (currentSort === 'price-asc') {
+        sorted.sort((a, b) => (a.price || 0) - (b.price || 0));
+      } else if (currentSort === 'price-desc') {
+        sorted.sort((a, b) => (b.price || 0) - (a.price || 0));
+      }
+      
+      // 3. Render
+      sorted.forEach(p => {
+        container.appendChild(createCard(p));
+      });
+    };
+
+    // Toast creation logic
+    const showToast = (productName) => {
+      const toastContainer = document.getElementById('toast-container');
+      if (!toastContainer) return;
+      
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `
+        <span style="color: #10b981; font-weight: bold;">✓</span>
+        <span>Added <strong>${productName}</strong> to cart!</span>
+      `;
+      
+      toastContainer.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.classList.add('fade-out');
+        toast.addEventListener('animationend', () => {
+          toast.remove();
+        });
+      }, 2500);
+    };
+
+    // Sort event binder
+    const sortSelect = document.getElementById('sort-select');
+    if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderFilteredAndSortedProducts();
+      });
+    }
+
+    // Main fetch & init
     fetch(API_URL)
       .then(res => res.json())
       .then(payload => {
-        // backend may return either an array or an object { products, page, total }
-        const products = Array.isArray(payload) ? payload : (Array.isArray(payload?.products) ? payload.products : []);
-        const sorted = products.slice().sort((a, b) => new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id));
-        const latestItems = sorted.slice(0, 8);
-        const container = document.getElementById('latest-products');
-        latestItems.forEach(p => container.appendChild(createCard(p)));
+        allProducts = Array.isArray(payload) ? payload : (Array.isArray(payload?.products) ? payload.products : []);
+        
+        // Sort descending by date/id for newest arrivals
+        allProducts.sort((a, b) => getTimestamp(b) - getTimestamp(a));
+        
+        // Hide loader
+        document.getElementById('products-loader').style.display = 'none';
+        
+        // Render Spotlight Spotlight
+        renderHeroSpotlight(allProducts);
+        
+        // Generate filters
+        generateCategoryFilters(allProducts);
+        
+        // Render items grid
+        renderFilteredAndSortedProducts();
       })
       .catch(err => {
-        console.error('Failed to load latest products:', err);
+        console.error('Failed to load new arrivals:', err);
+        document.getElementById('products-loader').style.display = 'none';
         const container = document.getElementById('latest-products');
-        container.innerHTML = '<p style="color:#f87171;">Unable to load new arrivals.</p>';
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px 20px; background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; box-shadow: var(--shadow-sm);">
+            <span style="font-size: 3rem;">⚠️</span>
+            <h3 style="margin: 10px 0; color: #1e293b;">Unable to load New Arrivals</h3>
+            <p style="color: #64748b; margin-bottom: 20px;">There was an error communicating with the server. Please try again.</p>
+            <button onclick="window.location.reload()" style="background: #0f172a; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; transition: 0.2s;">
+              Retry Connection
+            </button>
+          </div>
+        `;
       });
   </script>
 
   <script src="./header.js"></script>
   <script src="./nav-active.js"></script>
 </body>
+
 </html>

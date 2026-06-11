@@ -126,8 +126,24 @@ const OrderProcessor = () => {
       note: `Payment: ${paymentMethod.toUpperCase()} | Shipping: ${shippingMethod.toUpperCase()}`
     };
 
+    let API_BASE_URL = "https://techstock-kxtz.onrender.com";
+    if (window.location) {
+      const hn = window.location.hostname;
+      const isLocal =
+        hn === 'localhost' ||
+        hn === '127.0.0.1' ||
+        /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(hn) ||
+        hn.endsWith('.local') ||
+        !hn ||
+        window.location.protocol === 'file:';
+      if (isLocal) {
+        const host = (window.location.protocol === 'file:' || !hn) ? 'localhost' : hn;
+        API_BASE_URL = `http://${host}:5001`;
+      }
+    }
+
     try {
-      const res = await fetch("https://techstock-kxtz.onrender.com/orders", {
+      const res = await fetch(`${API_BASE_URL}/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

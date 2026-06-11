@@ -4,13 +4,296 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartBox | Product Overview</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <title>Product Detail – TechStock</title>
+  <meta name="description" content="View full product details, specs, and pricing at TechStock." />
   <link rel="stylesheet" href="./styles.css" />
+  <style>
+    /* ── Product Detail Layout ─────────────────────────────────────────────── */
+    .product-detail-wrapper {
+      max-width: 1200px;
+      margin: 48px auto;
+      padding: 0 24px;
+    }
+
+    .product-detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .product-detail-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .product-detail-wrapper {
+        margin: 24px auto;
+      }
+    }
+
+    /* ── Media Column ──────────────────────────────────────────────────────── */
+    .detail-media-col {
+      position: sticky;
+      top: 90px;
+    }
+
+    .detail-main-img-wrap {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: transparent;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .detail-main-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .detail-main-img-wrap img:hover {
+      transform: scale(1.05);
+    }
+
+    .detail-thumbs-wrap {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .detail-thumb {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background: transparent;
+      padding: 4px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .detail-thumb:hover,
+    .detail-thumb.active {
+      border-color: #e60044;
+      transform: scale(1.08);
+    }
+
+    /* ── Info Column ───────────────────────────────────────────────────────── */
+    .detail-info-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .detail-category {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #e60044;
+    }
+
+    .detail-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    .detail-sku {
+      font-size: 0.82rem;
+      color: #64748b;
+    }
+
+    .detail-sku span {
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .detail-brand-model {
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .detail-brand-model strong {
+      color: #e2e8f0;
+    }
+
+    .detail-divider {
+      border: none;
+      border-top: 1px solid rgba(148, 163, 184, 0.12);
+      margin: 4px 0;
+    }
+
+    .detail-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+
+    .detail-price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #f1f5f9;
+    }
+
+    .detail-price-labelled {
+      font-size: 1.1rem;
+      color: #64748b;
+      text-decoration: line-through;
+    }
+
+    .detail-stock-wrap {
+      font-size: 0.9rem;
+    }
+
+    .detail-stock.in {
+      color: #22c55e;
+      font-weight: 600;
+    }
+
+    .detail-stock.out {
+      color: #ef4444;
+      font-weight: 600;
+    }
+
+    .detail-desc-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      margin-top: 4px;
+    }
+
+    .detail-desc {
+      font-size: 0.92rem;
+      color: #94a3b8;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* ── Actions ───────────────────────────────────────────────────────────── */
+    .detail-actions-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .qty-counter {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 10px;
+      width: fit-content;
+      overflow: hidden;
+    }
+
+    .qty-counter button {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: none;
+      padding: 10px 18px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .qty-counter button:hover {
+      background: #334155;
+    }
+
+    .qty-counter input {
+      background: #0f172a;
+      color: #f1f5f9;
+      border: none;
+      border-left: 1px solid rgba(148, 163, 184, 0.15);
+      border-right: 1px solid rgba(148, 163, 184, 0.15);
+      text-align: center;
+      width: 54px;
+      padding: 10px 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .detail-buttons-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .detail-add-btn,
+    .detail-buy-btn {
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      letter-spacing: 0.02em;
+    }
+
+    .detail-add-btn {
+      background: #e60044;
+      color: #fff;
+      flex: 1;
+    }
+
+    .detail-add-btn:hover:not(.disabled) {
+      background: #c0003a;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(230, 0, 68, 0.35);
+    }
+
+    .detail-add-btn.disabled {
+      background: #334155;
+      color: #64748b;
+      cursor: not-allowed;
+    }
+
+    .detail-buy-btn {
+      background: transparent;
+      color: #e60044;
+      border: 2px solid #e60044;
+      flex: 1;
+    }
+
+    .detail-buy-btn:hover {
+      background: rgba(230, 0, 68, 0.08);
+      transform: translateY(-2px);
+    }
+
+    /* ── Error / Loading ───────────────────────────────────────────────────── */
+    .error-msg {
+      color: #ef4444;
+      font-size: 1rem;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .loading-msg {
+      color: #94a3b8;
+      font-size: 1rem;
+      padding: 40px;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-  <!-- Header Navbar -->
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
   <header class="dashboard-header">
     <div style="display:flex; align-items:center; gap:10px;">
       <button id="mobileMenuBtn" class="hamburger-btn mobile-only">☰</button>
@@ -61,38 +344,47 @@
     </div>
   </header>
 
-  <!-- Mobile Drawer -->
+  <!-- ── Mobile Drawer ──────────────────────────────────────────────────── -->
   <div id="mobileDrawer" class="mobile-drawer">
     <div class="mobile-drawer-header">
       <div class="dashboard-title">Menu</div>
       <button id="closeMobileDrawerBtn" class="mobile-drawer-close">&times;</button>
     </div>
-    <input type="text" placeholder="Search products..." class="mobile-drawer-search" />
+    <div class="mobile-search-container" style="position: relative; margin: 10px 20px;">
+      <input type="text" id="mobileSearchInput" placeholder="Search products..." class="mobile-drawer-search"
+        style="width: 100%; box-sizing: border-box;" />
+      <div id="mobileSearchResults" class="search-results-dropdown"
+        style="display: none; position: absolute; left: 0; right: 0; width: auto; max-height: 250px;"></div>
+    </div>
+    <div class="mobile-profile-section">
+      <img id="mobileAvatar"
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
+        alt="Avatar" class="mobile-avatar" />
+      <div class="mobile-profile-info">
+        <h4 id="mobileName">User Name</h4>
+        <p id="mobileEmail">user@example.com</p>
+      </div>
+    </div>
     <nav class="mobile-drawer-nav">
-      <a href="user-dashboard.html">Home</a>
+      <a href="index.html">Home</a>
       <a href="user-dashboard.html">Shop All</a>
       <a href="new-arrivals.html">New Arrivals</a>
       <a href="best-sellers.html">Best Sellers</a>
       <a href="about.html">About</a>
-      <div class="mobile-profile-section">
-        <img id="mobileAvatar"
-          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cbd5e1'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 14c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 2.12C16.43 19.18 14.03 20 12 20z'/></svg>"
-          alt="Avatar" class="mobile-avatar" />
-        <div class="mobile-profile-info">
-          <h4 id="mobileName">User Name</h4>
-          <p id="mobileEmail">user@example.com</p>
-        </div>
-      </div>
+      <a href="login.html" id="mobileLoginBtn" style="color: #38bdf8; display:none;">Login</a>
+      <a href="#" id="mobileLogoutBtn" style="color: #e60044; display:none;">Log Out</a>
     </nav>
   </div>
 
-  <!-- Product Details Display -->
-  <main class="dashboard-main">
-    <div id="productDetailContainer" class="detail-container">
-      <p style="text-align:center;font-size:1.2rem;color:#475569;margin-top:40px;">Loading product details...</p>
+  <!-- ── Main Content ───────────────────────────────────────────────────── -->
+  <main>
+    <div class="product-detail-wrapper">
+      <div id="productDetailContainer">
+        <p class="loading-msg">Loading product...</p>
+      </div>
     </div>
 
-    <!-- Unified Cart Sidebar -->
+    <!-- ── Cart Sidebar ─────────────────────────────────────────────────── -->
     <div id="cartSidebar" class="cart-sidebar">
       <div class="cart-sidebar-content">
         <div class="cart-sidebar-header">
@@ -117,8 +409,11 @@
     </div>
   </main>
 
-  <script src="./product-detail.js"></script>
+  <!-- ── Scripts ───────────────────────────────────────────────────────── -->
+  <!-- header.js handles: token, cart, profile, logout, mobile drawer, search -->
   <script src="./header.js"></script>
+  <!-- product-detail.js handles: fetching & rendering product details -->
+  <script src="./product-detail.js"></script>
   <script src="./nav-active.js"></script>
 </body>
 

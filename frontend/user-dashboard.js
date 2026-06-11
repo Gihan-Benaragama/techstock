@@ -67,8 +67,11 @@ function renderServerProducts(products, page, totalPages, total) {
 
   const html = products.map(product => {
     let imageUrl = (Array.isArray(product.images) && product.images.length > 0) ? product.images[0] : 'images/default.png';
+    // Encode URL to handle spaces/special characters
+    imageUrl = encodeURI(imageUrl);
     if (!/^https?:\/\//i.test(imageUrl) && !imageUrl.startsWith('/')) imageUrl = `./${imageUrl}`;
     let image2Url = (Array.isArray(product.images) && product.images.length > 1) ? product.images[1] : imageUrl;
+    image2Url = encodeURI(image2Url);
     if (!/^https?:\/\//i.test(image2Url) && !image2Url.startsWith('/')) image2Url = `./${image2Url}`;
     return `
       <div class="product-card">
