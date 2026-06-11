@@ -8,8 +8,6 @@ dotenv.config();
 
 import express from "express";
 import mongoose from "mongoose";
-import path from "path";
-import { fileURLToPath } from "url";
 import studentRouter from "./routers/studentRouter.js";
 import userRouter from "./routers/userRouter.js";
 import { getAllUsers } from "./controller/userController.js";
@@ -19,9 +17,6 @@ import productRouter from "./routers/productRouter.js";
 import orderRouter from "./routers/orderRouter.js";
 
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const frontendDir = path.resolve(__dirname, "../frontend");
 
 function go() {
     console.log("Started..")
@@ -50,11 +45,29 @@ app.use((req, res, next) => {
     next();
 });
 
-// Enable CORS middleware for robust local development cross-origin requests
+// Enable CORS middleware for robust local development and production cross-origin requests
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5001",
+  "http://127.0.0.1:5173",
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    const origin = req.headers.origin;
+    if (origin) {
+        const isAllowed = allowedOrigins.includes(origin) || 
+                          origin.endsWith(".vercel.app") || 
+                          origin.startsWith("http://localhost:") || 
+                          origin.startsWith("http://127.0.0.1:");
+                          
+        if (isAllowed) {
+            res.setHeader("Access-Control-Allow-Origin", origin);
+        }
+    }
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
     if (req.method === "OPTIONS") {
         return res.sendStatus(200);
     }
@@ -62,44 +75,6 @@ app.use((req, res, next) => {
 });
 
 
-// Middleware to serve HTML shell for JSX files requested by browser navigation on backend port 5001
-app.get('/frontend/:page.jsx', (req, res, next) => {
-  const acceptHeader = req.headers.accept || '';
-  if (acceptHeader.includes('text/html')) {
-    const pageName = req.params.page;
-    res.setHeader('Content-Type', 'text/html');
-    return res.send(`<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Checkout - SmartBox</title>
-  <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="${pageName}.css" />
-  <!-- React and Babel CDN -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body>
-  <div id="root"></div>
-  <!-- Load the component -->
-  <script type="text/babel" src="${pageName}.jsx"></script>
-  <script type="text/babel">
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<OrderProcessor />);
-  </script>
-</body>
-</html>`);
-  }
-  next();
-});
-
-// Serve frontend static files under /frontend path BEFORE authentication middleware
-app.use('/frontend', express.static(frontendDir));
 // Public user routes (signup and login) - no auth required
 app.use('/users', userRouter);
 app.use('/products', productRouter); // public route
@@ -113,7 +88,7 @@ app.use('/api/users', userRouter); // if needed for other user APIs
 app.use('/orders', orderRouter);
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(frontendDir, "login.html"));
+    res.json({ status: "API Running" });
 });
 
 
@@ -132,14 +107,6 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-// Keep-alive ping to prevent Render free tier from sleeping
-setInterval(() => {
-    fetch(`https://techstock-kxtz.onrender.com/users/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: 'ping@ping.com', password: 'ping' })
-    }).catch(() => {});
-}, 14 * 60 * 1000);
 // Keep Render awake by pinging login endpoint every 14 minutes
 setInterval(() => {
   fetch('https://techstock-kxtz.onrender.com/users/login', {
