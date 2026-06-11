@@ -14,7 +14,7 @@ const payload = token ? decodeJwtPayload(token) : null;
 const isLoggedIn = !!payload;
 
 // Resolve API base: prefer local backend when developing locally
-let API_BASE_URL = "https://techstock-kxtz.onrender.com";
+let API_BASE_URL = "https://techstock-tld1.onrender.com";
 if (window.location) {
   const hn = window.location.hostname;
   const isLocal = hn === 'localhost' || 

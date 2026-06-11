@@ -5,7 +5,7 @@
 // Resolve API base: prefer local backend when developing locally
 // Resolve API base: prefer local backend when developing locally
 function getApiBaseUrl() {
-  let base = "https://techstock-kxtz.onrender.com";
+  let base = "https://techstock-tld1.onrender.com";
   if (window.location) {
     const hn = window.location.hostname;
     const isLocal = hn === 'localhost' ||
@@ -43,7 +43,7 @@ function fetchPage(page) {
       if (!r.ok) {
         // If localhost fails, try remote URL
         if (url.includes('localhost')) {
-          const remoteUrl = `https://techstock-kxtz.onrender.com/products?page=${page}&limit=${pageSize}`;
+          const remoteUrl = `https://techstock-tld1.onrender.com/products?page=${page}&limit=${pageSize}`;
           console.warn('Primary fetch failed, trying remote:', remoteUrl);
           return fetch(remoteUrl, { headers }).then(r2 => {
             if (!r2.ok) throw new Error(`Remote fetch failed: ${r2.status}`);

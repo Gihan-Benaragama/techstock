@@ -126,7 +126,7 @@ const OrderProcessor = () => {
       note: `Payment: ${paymentMethod.toUpperCase()} | Shipping: ${shippingMethod.toUpperCase()}`
     };
 
-    let API_BASE_URL = "https://techstock-kxtz.onrender.com";
+    let API_BASE_URL = "https://techstock-tld1.onrender.com";
     if (window.location) {
       const hn = window.location.hostname;
       const isLocal =

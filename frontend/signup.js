@@ -1,6 +1,6 @@
 const form = document.getElementById("signupForm");
 const statusEl = document.getElementById("status");
-const API_BASE_URL = "https://techstock-kxtz.onrender.com";
+const API_BASE_URL = "https://techstock-tld1.onrender.com";
 
 function setStatus(message, type = "") {
   statusEl.textContent = message;

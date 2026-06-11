@@ -2,7 +2,7 @@ const form = document.getElementById("loginForm");
 const statusEl = document.getElementById("status");
 const submitBtn = document.getElementById("submitBtn");
 
-const API_BASE_URL = "https://techstock-kxtz.onrender.com";
+const API_BASE_URL = "https://techstock-tld1.onrender.com";
 function setStatus(message, type = "") {
   statusEl.textContent = message;
   statusEl.className = `status ${type}`.trim();
