@@ -160,21 +160,30 @@ function initPaginationListener() {
       if (btn.dataset.action === 'prev') {
         if (currentPage > 1) {
           fetchPage(currentPage - 1).then(data => {
-            if (data) renderServerProducts(data.products, data.page, data.totalPages, data.total);
+            if (data) {
+              renderServerProducts(data.products, data.page, data.totalPages, data.total);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
           });
         }
         return;
       }
       if (btn.dataset.action === 'next') {
         fetchPage(currentPage + 1).then(data => {
-          if (data) renderServerProducts(data.products, data.page, data.totalPages, data.total);
+          if (data) {
+            renderServerProducts(data.products, data.page, data.totalPages, data.total);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
         });
         return;
       }
       const page = parseInt(btn.dataset.page, 10);
       if (!isNaN(page)) {
         fetchPage(page).then(data => {
-          if (data) renderServerProducts(data.products, data.page, data.totalPages, data.total);
+          if (data) {
+            renderServerProducts(data.products, data.page, data.totalPages, data.total);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
         });
       }
     });

@@ -665,29 +665,55 @@ body {
   gap: 8px;
   justify-content: center;
   align-items: center;
-  margin: 28px 0 8px 0;
+  margin: 48px auto;
+  padding: 0 20px;
 }
 .pagination .page-btn {
-  background: transparent;
-  border: 1px solid #e5e7eb;
-  color: #111827;
-  padding: 8px 12px;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 42px;
+  height: 42px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
-.pagination .page-btn:hover { background: #f8fafc; }
-.pagination .page-btn[disabled] { opacity: 0.45; cursor: default; }
+.pagination .page-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+.pagination .page-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
 .pagination .page-btn.active {
-  border-color: transparent;
-  border-bottom: 3px solid #e60044;
-  color: #e60044;
-  background: transparent;
+  background: #e60044;
+  color: #ffffff;
+  border-color: #e60044;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(230, 0, 68, 0.25);
+}
+.pagination .page-btn[disabled] {
+  background: #f8fafc;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .pagination .ellipsis {
-  color: #6b7280;
+  font-size: 1rem;
+  color: #64748b;
   padding: 0 8px;
-  font-size: 1.1rem;
+  user-select: none;
 }
 
 /* Make products list overlap the hero section visually (cards appear on top of hero image) */
@@ -1939,4 +1965,4 @@ input {
   font-size: 0.8rem;
   color: #64748b;
   word-break: break-all;
-}
+}
